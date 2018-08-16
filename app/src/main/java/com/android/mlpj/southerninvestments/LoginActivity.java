@@ -2,6 +2,8 @@ package com.android.mlpj.southerninvestments;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,6 +37,9 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
                 //login();
+//                Fragment fragment = new DashboardFragment();
+//                FragmentManager fragmentManager = getSupportFragmentManager();
+//                fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment).commit();
             }
         });
     }
