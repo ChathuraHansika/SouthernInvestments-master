@@ -14,6 +14,8 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
 
+    private SQLLiteHelper sqlLiteHelper;
+
     EditText _emailText;
     EditText _passwordText;
     Button _loginButton;
@@ -37,6 +39,9 @@ public class LoginActivity extends AppCompatActivity {
                 //login();
             }
         });
+
+        sqlLiteHelper = new SQLLiteHelper(this);
+
     }
     public void login() {
         Log.d(TAG, "Login");
