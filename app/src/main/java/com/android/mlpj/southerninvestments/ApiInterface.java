@@ -8,4 +8,7 @@ import retrofit2.http.GET;
 public interface ApiInterface {
     @GET("Hotel")
     Call<List<CustomerDetails>> getDetails();
+
+    @GET("CabDetails")
+    Call<List<CustomerDetails>> getDetails1();
 }
