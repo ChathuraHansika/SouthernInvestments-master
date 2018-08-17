@@ -2,9 +2,13 @@ package com.android.mlpj.southerninvestments;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SQLLiteHelper extends SQLiteOpenHelper{
     private static String dbName = "LocalDb.db";
@@ -90,4 +94,53 @@ public class SQLLiteHelper extends SQLiteOpenHelper{
         return db.insert("Customer", null, contentValues);
     }
 
+
+    public long insertLoans (LoanDetails loan) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("id", loan.getId());
+        contentValues.put("loan_no", loan.getLoanNo());
+        contentValues.put("interest_rate", loan.getInterestRate());
+        contentValues.put("installment_amount", loan.getInstallmentAmount());
+        contentValues.put("no_of_installments", loan.getNoOfInstallments());
+        contentValues.put("start_date", loan.getStartDate());
+        contentValues.put("end_date", loan.getEndDate());
+        contentValues.put("duration", loan.getDuration());
+        contentValues.put("customer_id", loan.getCustomerId());
+        //contentValues.put("created_at", loan.getCreatedAt());
+        //contentValues.put("updated_at", loan.getUpdatedAt());
+
+        return db.insert("CustomerLoan", null, contentValues);
+    }
+
+    public long insertRepayments (Repayment repayment) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("id", repayment.getId());
+        contentValues.put("loan_id", repayment.getLoanId());
+        contentValues.put("bank_book_id", repayment.getBankBookId());
+        contentValues.put("cash_book_id", repayment.getCashBookId());
+        contentValues.put("amount", repayment.getAmount());
+        contentValues.put("installment_count", repayment.getInstallmentCount());
+        contentValues.put("remaining_amount", repayment.getRemainingAmount());
+        contentValues.put("created_at", repayment.getCreatedAt());
+        contentValues.put("updated_at", repayment.getUpdatedAt());
+
+        return db.insert("LoanRepayment", null, contentValues);
+    }
+
+    public List<CustomerDetails> getAllCustomers(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery( "select * from Customer", null );
+        res.moveToFirst();
+
+        List<CustomerDetails> customer_list = new ArrayList<CustomerDetails>();
+
+        while(res.isAfterLast() == false){
+            CustomerDetails newCustomer = new CustomerDetails(res.getString(2),res.getString(3));
+            customer_list.add(newCustomer);
+            res.moveToNext();
+        }
+        return customer_list;
+    }
 }

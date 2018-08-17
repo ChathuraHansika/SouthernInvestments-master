@@ -18,13 +18,11 @@ public class SalesRep {
     @SerializedName("profile_pic")
     private String profilePic;
 
-
     @SerializedName("NIC")
     private String nicNo;
 
     @SerializedName("addLine1")
     private String addLine1;
-
 
     @SerializedName("addLine2")
     private String addLine2;
@@ -47,16 +45,8 @@ public class SalesRep {
     @SerializedName("updated_at")
     private String updatedAt;
 
-    @SerializedName("has_customer")
-    private List<Customer> customer;
 
-    /*@SerializedName("customer_loans")
-    private List<LoanDetails> customerLoans;
-
-    @SerializedName("customer_repayments")
-    private List<LoanDetails> customerRepayments;*/
-
-    public SalesRep(int id, String name, String email, String profilePic, String nicNo, String addLine1, String addLine2, String city, String commissionId, String calendarId, String roleId, String createdAt, String updatedAt, List<Customer> customer) {
+    public SalesRep(int id, String name, String email, String profilePic, String nicNo, String addLine1, String addLine2, String city, String commissionId, String calendarId, String roleId, String createdAt, String updatedAt) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -70,7 +60,6 @@ public class SalesRep {
         this.roleId = roleId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.customer = customer;
     }
 
     public int getId() {
@@ -177,11 +166,4 @@ public class SalesRep {
         this.updatedAt = updatedAt;
     }
 
-    public List<Customer> getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(List<Customer> customer) {
-        this.customer = customer;
-    }
 }

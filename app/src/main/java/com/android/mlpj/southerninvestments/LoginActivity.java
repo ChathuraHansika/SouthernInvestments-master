@@ -42,10 +42,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 login();
-                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                startActivity(intent);
-                finish();
-
             }
         });
 
@@ -88,13 +84,34 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<LoginResultPOJO> call, Response<LoginResultPOJO> response) {
                 if(response.code() == 200){
-                    SalesRep salesRep = response.body().getUser();
-                    Toast.makeText(LoginActivity.this, salesRep.getCustomer().get(0).getName(), Toast.LENGTH_LONG).show();
+                    try{
+                        LoginResultPOJO loginResultPOJO = response.body();
+                        Toast.makeText(LoginActivity.this, Boolean.toString(loginResultPOJO.isError()), Toast.LENGTH_LONG).show();
+                            if(!loginResultPOJO.isError()){
+                                //inserting customer tuples
+                                for(int i = 0; i < loginResultPOJO.getCustomers().size();i++){
+                                    long result = sqlLiteHelper.insertCustomer(loginResultPOJO.getCustomers().get(i));
+                                }
 
-                    for(int i = 0; i < salesRep.getCustomer().size();i++){
-                        long result = sqlLiteHelper.insertCustomer(salesRep.getCustomer().get(i));
+                                //inserting loan tuples
+                                for(int i = 0; i < loginResultPOJO.getLoans().size();i++){
+                                    long result = sqlLiteHelper.insertLoans(loginResultPOJO.getLoans().get(i));
+                                }
 
+                                //insert repayments tuples
+                                for(int i = 0; i < loginResultPOJO.getRepayments().size();i++){
+                                    long result = sqlLiteHelper.insertRepayments(loginResultPOJO.getRepayments().get(i));
+                                }
+
+                                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+
+                    }catch (NullPointerException e){
+                        Toast.makeText(LoginActivity.this, "Null pointer Exception "+ e.getMessage(), Toast.LENGTH_LONG).show();
                     }
+
 
                 }else{
                     Toast.makeText(LoginActivity.this, "HTTP Error code " + response.code(), Toast.LENGTH_LONG).show();

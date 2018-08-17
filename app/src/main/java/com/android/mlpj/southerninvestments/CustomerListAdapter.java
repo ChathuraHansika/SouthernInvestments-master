@@ -15,12 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapter.ViewHolder>{
-    private List<CustomerDetails> mCustomerDetails;
+    private List<CustomerDetails> mCustomersDetails;
     private Context mContext;
     private FragmentManager fragmentManager;
 
     public CustomerListAdapter(List<CustomerDetails> customerDetails, Context context, FragmentManager fragmentManager) {
-        this.mCustomerDetails = customerDetails;
+        this.mCustomersDetails = customerDetails;
         this.mContext = context;
         this.fragmentManager = fragmentManager;
     }
@@ -37,8 +37,9 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.Name.setText(mCustomerDetails.get(position).getName());
-        holder.Email.setText(mCustomerDetails.get(position).getEmail());
+        //set status(active...)
+        holder.Name.setText(mCustomersDetails.get(position).getName());
+        holder.Email.setText(mCustomersDetails.get(position).getEmail());
         holder.Card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,7 +58,7 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
 
     @Override
     public int getItemCount() {
-        return  mCustomerDetails.size();
+        return  mCustomersDetails.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -75,8 +76,8 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
     }
 
     public void upDateList(List<CustomerDetails> list){
-        mCustomerDetails = new ArrayList<>();
-        mCustomerDetails.addAll(list);
+        mCustomersDetails = new ArrayList<>();
+        mCustomersDetails.addAll(list);
         notifyDataSetChanged();
 }
 }

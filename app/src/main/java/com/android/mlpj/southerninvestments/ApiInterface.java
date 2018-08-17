@@ -9,7 +9,7 @@ import retrofit2.http.Path;
 
 public interface ApiInterface {
 
-    @GET("/v2/5b75bd552e0000620053620a")
+    @GET("/v2/5b76f8d83000004c00848d96")
     Call<LoginResultPOJO> login();
 
     @GET("Hotel")

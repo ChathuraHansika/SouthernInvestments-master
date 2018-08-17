@@ -33,10 +33,11 @@ import retrofit2.Response;
 public class CustomerListFragment extends Fragment implements SearchView.OnQueryTextListener ,MenuItem.OnActionExpandListener {
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
-    private List<CustomerDetails> mCustomerDetails;
+    private List<CustomerDetails> mCustomersDetails;
     private CustomerListAdapter mCustomerListAdapter;
     private ApiInterface mApiInterface;
     private Context mContext;
+    private SQLLiteHelper sqlLiteHelper;
 
 
     public CustomerListFragment() {
@@ -55,22 +56,15 @@ public class CustomerListFragment extends Fragment implements SearchView.OnQuery
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         setHasOptionsMenu(true);
-        mApiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<List<CustomerDetails>> call = mApiInterface.getDetails();
-        call.enqueue(new Callback<List<CustomerDetails>>() {
-            @Override
-            public void onResponse(Call<List<CustomerDetails>> call, Response<List<CustomerDetails>> response) {
-                mCustomerDetails = response.body();
-                FragmentManager fragmentManager = getFragmentManager();
-                mCustomerListAdapter = new CustomerListAdapter(mCustomerDetails, getActivity(), fragmentManager);
-                mRecyclerView.setAdapter(mCustomerListAdapter);
-            }
 
-            @Override
-            public void onFailure(Call<List<CustomerDetails>> call, Throwable t) {
+        //retrieving customer data from sqlite
+        sqlLiteHelper = new SQLLiteHelper(getContext());
+        mCustomersDetails = sqlLiteHelper.getAllCustomers();
+        FragmentManager fragmentManager = getFragmentManager();
+        mCustomerListAdapter = new CustomerListAdapter(mCustomersDetails, getActivity(), fragmentManager);
+        mRecyclerView.setAdapter(mCustomerListAdapter);
 
-            }
-        });
+
         // chkStatus();
 
 
@@ -98,7 +92,7 @@ public class CustomerListFragment extends Fragment implements SearchView.OnQuery
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                final List<CustomerDetails> filtermodelList = filter(mCustomerDetails,newText);
+                final List<CustomerDetails> filtermodelList = filter(mCustomersDetails,newText);
                 mCustomerListAdapter.upDateList(filtermodelList);
                 return true;
             }
