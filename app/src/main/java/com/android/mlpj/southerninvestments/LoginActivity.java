@@ -10,6 +10,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
@@ -33,23 +41,27 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
+                login();
                 Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                 startActivity(intent);
                 finish();
-                //login();
+
             }
         });
 
         sqlLiteHelper = new SQLLiteHelper(this);
+        //Customer customer = new Customer(1,12,"Lahiru", "abc@abc.com","98745615V","0714587894","active","no 78","suh","dddd",4,null,null);
+        //long result = sqlLiteHelper.insertCustomer(customer);
+        //Toast.makeText(this, Long.toString(result), Toast.LENGTH_SHORT).show();
 
     }
     public void login() {
         Log.d(TAG, "Login");
 
-        if (!validate()) {
+        /*if (!validate()) {
             onLoginFailed();
             return;
-        }
+        }*/
 
         _loginButton.setEnabled(false);
 
@@ -57,22 +69,48 @@ public class LoginActivity extends AppCompatActivity {
                 R.style.AppTheme);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
-        progressDialog.show();
+        //progressDialog.show();
 
-        String email = _emailText.getText().toString();
-        String password = _passwordText.getText().toString();
+        //String email = _emailText.getText().toString();
+        //String password = _passwordText.getText().toString();
 
-        // TODO: Implement your own authentication logic here.
 
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onLoginSuccess or onLoginFailed
-                        onLoginSuccess();
-                        // onLoginFailed();
-                        progressDialog.dismiss();
+
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl("http://www.mocky.io/")
+                .addConverterFactory(GsonConverterFactory.create());
+        Retrofit retrofit = builder.build();
+
+        ApiInterface client = retrofit.create(ApiInterface.class);
+        Call<LoginResultPOJO> call = client.login();
+
+        call.enqueue(new Callback<LoginResultPOJO>() {
+            @Override
+            public void onResponse(Call<LoginResultPOJO> call, Response<LoginResultPOJO> response) {
+                if(response.code() == 200){
+                    SalesRep salesRep = response.body().getUser();
+                    Toast.makeText(LoginActivity.this, salesRep.getCustomer().get(0).getName(), Toast.LENGTH_LONG).show();
+
+                    for(int i = 0; i < salesRep.getCustomer().size();i++){
+                        long result = sqlLiteHelper.insertCustomer(salesRep.getCustomer().get(i));
+
                     }
-                }, 3000);
+
+                }else{
+                    Toast.makeText(LoginActivity.this, "HTTP Error code " + response.code(), Toast.LENGTH_LONG).show();
+                }
+
+
+                progressDialog.dismiss();
+
+            }
+
+            @Override
+            public void onFailure(Call<LoginResultPOJO> call, Throwable t) {
+                Toast.makeText(LoginActivity.this, "Connection Failure " + t.getMessage(), Toast.LENGTH_LONG).show();
+//                progressDialog.dismiss();
+            }
+        });
     }
 
 
