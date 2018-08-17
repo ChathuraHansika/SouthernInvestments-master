@@ -16,5 +16,5 @@ public interface ApiInterface {
     Call<List<CustomerDetails>> getDetails();
 
     @GET("CabDetails")
-    Call<List<CustomerDetails>> getDetails1();
+    Call<List<DueLoansDetails>> getDueLoans();
 }

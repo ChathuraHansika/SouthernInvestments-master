@@ -51,6 +51,8 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+
+
         if (id == R.id.nav_profile) {
             setTitle("Profile Details");
             Fragment fragment = new HomeFragment();
@@ -58,18 +60,25 @@ public class MainActivity extends AppCompatActivity
 
             //fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment).commit();
-        } else if (id == R.id.nav_my_loans) {
-            setTitle("Issue Loan");
-            Fragment fragment = new LoanIssueNicSearchFragment();
+        } else if(id==R.id.nav_home){
+            setTitle("Dashboard");
+            Fragment fragment = new DashboardFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
-
             fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment).commit();
+        }
+
+            else if (id == R.id.nav_my_loans) {
+//            setTitle("Issue Loan");
+//            Fragment fragment = new LoanIssueNicSearchFragment();
+//            FragmentManager fragmentManager = getSupportFragmentManager();
+//            fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment).commit();
+//
         } else if (id == R.id.nav_slideshow) {
-            setTitle("Loan Repayments");
-            Fragment fragment = new CustomerListFragment();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-
-            fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment).commit();
+//            setTitle("Loan Repayments");
+//            Fragment fragment = new CustomerListFragment();
+//            FragmentManager fragmentManager = getSupportFragmentManager();
+//
+//            fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment).commit();
 
         }
 
