@@ -22,7 +22,9 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
 
+    private ProgressDialog mProgressDialog;
     private SQLLiteHelper sqlLiteHelper;
+    private UserLocalStore userLocalStore;
 
     EditText _emailText;
     EditText _passwordText;
@@ -34,8 +36,10 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         _emailText = findViewById(R.id.input_email);
-        _emailText = findViewById(R.id.input_password);
+        _passwordText = findViewById(R.id.input_password);
         _loginButton = findViewById(R.id.btn_login);
+
+        userLocalStore = new UserLocalStore(this);
 
         _loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -51,6 +55,19 @@ public class LoginActivity extends AppCompatActivity {
         //Toast.makeText(this, Long.toString(result), Toast.LENGTH_SHORT).show();
 
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if (userLocalStore.getUserLoggedIn() == true) {
+            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
+    }
+
     public void login() {
         Log.d(TAG, "Login");
 
@@ -59,34 +76,40 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }*/
 
-        _loginButton.setEnabled(false);
+        String email = _emailText.getText().toString();
+        String password = _passwordText.getText().toString();
 
-        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
-                R.style.AppTheme);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating...");
-        //progressDialog.show();
+        if (email.equals("")) {
+            _emailText.setError("Can't be empty");
+        } else if (password.equals("")) {
+            _passwordText.setError("Can't be empty");
+        } else {
+            _loginButton.setEnabled(false);
 
-        //String email = _emailText.getText().toString();
-        //String password = _passwordText.getText().toString();
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setTitle("Logging In...");
+            mProgressDialog.setMessage("Please wait for the Authentication!");
+            mProgressDialog.show();
 
 
 
-        Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("http://www.mocky.io/")
-                .addConverterFactory(GsonConverterFactory.create());
-        Retrofit retrofit = builder.build();
 
-        ApiInterface client = retrofit.create(ApiInterface.class);
-        Call<LoginResultPOJO> call = client.login();
 
-        call.enqueue(new Callback<LoginResultPOJO>() {
-            @Override
-            public void onResponse(Call<LoginResultPOJO> call, Response<LoginResultPOJO> response) {
-                if(response.code() == 200){
-                    try{
-                        LoginResultPOJO loginResultPOJO = response.body();
-                        Toast.makeText(LoginActivity.this, Boolean.toString(loginResultPOJO.isError()), Toast.LENGTH_LONG).show();
+            Retrofit.Builder builder = new Retrofit.Builder()
+                    .baseUrl("http://www.southernpropertydevelopers.com/")
+                    .addConverterFactory(GsonConverterFactory.create());
+            Retrofit retrofit = builder.build();
+
+            ApiInterface client = retrofit.create(ApiInterface.class);
+            Call<LoginResultPOJO> call = client.login(email, password);
+
+            call.enqueue(new Callback<LoginResultPOJO>() {
+                @Override
+                public void onResponse(Call<LoginResultPOJO> call, Response<LoginResultPOJO> response) {
+                    if(response.code() == 200){
+                        try{
+                            LoginResultPOJO loginResultPOJO = response.body();
+                            Toast.makeText(LoginActivity.this, "Error : " + Boolean.toString(loginResultPOJO.isError()), Toast.LENGTH_LONG).show();
                             if(!loginResultPOJO.isError()){
                                 //inserting customer tuples
                                 for(int i = 0; i < loginResultPOJO.getCustomers().size();i++){
@@ -103,31 +126,40 @@ public class LoginActivity extends AppCompatActivity {
                                     long result = sqlLiteHelper.insertRepayments(loginResultPOJO.getRepayments().get(i));
                                 }
 
+
+                                //saving salesrep details in shared preferences
+                                userLocalStore.setUserLoggedIn(true);
+                                userLocalStore.setUserDetails(loginResultPOJO.getUser());
+
                                 Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                                 startActivity(intent);
                                 finish();
                             }
 
-                    }catch (NullPointerException e){
-                        Toast.makeText(LoginActivity.this, "Null pointer Exception "+ e.getMessage(), Toast.LENGTH_LONG).show();
+                        }catch (NullPointerException e){
+                            Toast.makeText(LoginActivity.this, "Null pointer Exception "+ e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+
+
+                    }else{
+                        Toast.makeText(LoginActivity.this, "HTTP Error code " + response.code(), Toast.LENGTH_LONG).show();
                     }
 
 
-                }else{
-                    Toast.makeText(LoginActivity.this, "HTTP Error code " + response.code(), Toast.LENGTH_LONG).show();
+                    mProgressDialog.dismiss();
+                    _loginButton.setEnabled(true);
+
                 }
 
+                @Override
+                public void onFailure(Call<LoginResultPOJO> call, Throwable t) {
+                    Toast.makeText(LoginActivity.this, "Connection Failure " + t.getMessage(), Toast.LENGTH_LONG).show();
+                    mProgressDialog.dismiss();
+                    _loginButton.setEnabled(true);
+                }
+            });
+        }
 
-                progressDialog.dismiss();
-
-            }
-
-            @Override
-            public void onFailure(Call<LoginResultPOJO> call, Throwable t) {
-                Toast.makeText(LoginActivity.this, "Connection Failure " + t.getMessage(), Toast.LENGTH_LONG).show();
-//                progressDialog.dismiss();
-            }
-        });
     }
 
 

@@ -31,13 +31,13 @@ public class SalesRep {
     private String city;
 
     @SerializedName("commission_id")
-    private String commissionId;
+    private int commissionId;
 
     @SerializedName("calendar_id")
-    private String calendarId;
+    private int calendarId;
 
     @SerializedName("role_id")
-    private String roleId;
+    private int roleId;
 
     @SerializedName("created_at")
     private String createdAt;
@@ -46,7 +46,7 @@ public class SalesRep {
     private String updatedAt;
 
 
-    public SalesRep(int id, String name, String email, String profilePic, String nicNo, String addLine1, String addLine2, String city, String commissionId, String calendarId, String roleId, String createdAt, String updatedAt) {
+    public SalesRep(int id, String name, String email, String profilePic, String nicNo, String addLine1, String addLine2, String city, int commissionId, int calendarId, int roleId, String createdAt, String updatedAt) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -126,27 +126,27 @@ public class SalesRep {
         this.city = city;
     }
 
-    public String getCommissionId() {
+    public int getCommissionId() {
         return commissionId;
     }
 
-    public void setCommissionId(String commissionId) {
+    public void setCommissionId(int commissionId) {
         this.commissionId = commissionId;
     }
 
-    public String getCalendarId() {
+    public int getCalendarId() {
         return calendarId;
     }
 
-    public void setCalendarId(String calendarId) {
+    public void setCalendarId(int calendarId) {
         this.calendarId = calendarId;
     }
 
-    public String getRoleId() {
+    public int getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(String roleId) {
+    public void setRoleId(int roleId) {
         this.roleId = roleId;
     }
 

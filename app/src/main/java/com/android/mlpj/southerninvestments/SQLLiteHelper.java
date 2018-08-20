@@ -143,4 +143,14 @@ public class SQLLiteHelper extends SQLiteOpenHelper{
         }
         return customer_list;
     }
+
+    public void removeAll()
+    {
+        // db.delete(String tableName, String whereClause, String[] whereArgs);
+        // If whereClause is null, it will delete all rows.
+        SQLiteDatabase db = this.getWritableDatabase(); // helper is object extends SQLiteOpenHelper
+        db.delete("Customer", null, null);
+        db.delete("CustomerLoan", null, null);
+        db.delete("LoanRepayment", null, null);
+    }
 }

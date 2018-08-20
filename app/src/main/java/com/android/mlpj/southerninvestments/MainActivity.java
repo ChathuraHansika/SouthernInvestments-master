@@ -1,5 +1,6 @@
 package com.android.mlpj.southerninvestments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -18,12 +19,18 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private UserLocalStore mUserLocalStore;
+    private SQLLiteHelper mSqlLiteHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        mUserLocalStore = new UserLocalStore(this);
+        mSqlLiteHelper = new SQLLiteHelper(this);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -73,13 +80,14 @@ public class MainActivity extends AppCompatActivity
 //            FragmentManager fragmentManager = getSupportFragmentManager();
 //            fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment).commit();
 //
-        } else if (id == R.id.nav_slideshow) {
-//            setTitle("Loan Repayments");
-//            Fragment fragment = new CustomerListFragment();
-//            FragmentManager fragmentManager = getSupportFragmentManager();
-//
-//            fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment).commit();
+        } else if (id == R.id.nav_logout) {
+            mUserLocalStore.clearUser();
+            mUserLocalStore.setUserLoggedIn(false);
+            mSqlLiteHelper.removeAll();
 
+            Intent intent = new Intent(this,LoginActivity.class);
+            startActivity(intent);
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
