@@ -1,5 +1,7 @@
 package com.android.mlpj.southerninvestments;
 
+import android.widget.Toast;
+
 import com.google.gson.annotations.SerializedName;
 
 public class LoanDetails {
@@ -12,6 +14,9 @@ public class LoanDetails {
 
     @SerializedName("interest_rate")
     private float interestRate;
+
+    @SerializedName("loan_amount")
+    private float loan_amount;
 
     @SerializedName("installment_amount")
     private float installmentAmount;
@@ -37,10 +42,11 @@ public class LoanDetails {
     @SerializedName("updated_at")
     private String updatedAt;
 
-    public LoanDetails(int id, int loanNo, float interestRate, float installmentAmount, int noOfInstallments, String startDate, String endDate, int duration, int customerId, String createdAt, String updatedAt) {
+    public LoanDetails(int id, int loanNo, float interestRate, float loan_amount, float installmentAmount, int noOfInstallments, String startDate, String endDate, int duration, int customerId, String createdAt, String updatedAt) {
         this.id = id;
         this.loanNo = loanNo;
         this.interestRate = interestRate;
+        this.loan_amount = loan_amount;
         this.installmentAmount = installmentAmount;
         this.noOfInstallments = noOfInstallments;
         this.startDate = startDate;
@@ -73,6 +79,14 @@ public class LoanDetails {
 
     public void setInterestRate(float interestRate) {
         this.interestRate = interestRate;
+    }
+
+    public float getLoan_amount() {
+        return loan_amount;
+    }
+
+    public void setLoan_amount(float loan_amount) {
+        this.loan_amount = loan_amount;
     }
 
     public float getInstallmentAmount() {

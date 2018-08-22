@@ -4,6 +4,7 @@ package com.android.mlpj.southerninvestments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -28,6 +29,7 @@ public class DueLoansFragment extends Fragment  {
     private DueLoansAdapter mDueLoansAdapter;
     private ApiInterface mApiInterface;
     private Context mContext;
+    private SQLLiteHelper sqlLiteHelper;
 
 
     public DueLoansFragment() {
@@ -45,21 +47,15 @@ public class DueLoansFragment extends Fragment  {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         setHasOptionsMenu(true);
-        mApiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<List<DueLoansDetails>> call = mApiInterface.getDueLoans();
-        call.enqueue(new Callback<List<DueLoansDetails>>() {
-            @Override
-            public void onResponse(Call<List<DueLoansDetails>> call, Response<List<DueLoansDetails>> response) {
-                mDueLoansDetails = response.body();
-                mDueLoansAdapter = new DueLoansAdapter(mDueLoansDetails, getActivity());
-                mRecyclerView.setAdapter(mDueLoansAdapter);
-            }
 
-            @Override
-            public void onFailure(Call<List<DueLoansDetails>> call, Throwable t) {
 
-            }
-        });
+        //retrieving due_loans data from sqlite
+        sqlLiteHelper = new SQLLiteHelper(getContext());
+        mDueLoansDetails = sqlLiteHelper.getDueLoans();
+        FragmentManager fragmentManager = getFragmentManager();
+        mDueLoansAdapter = new DueLoansAdapter(mDueLoansDetails, getActivity(), fragmentManager);
+        mRecyclerView.setAdapter(mDueLoansAdapter);
+
         // chkStatus();
 
 

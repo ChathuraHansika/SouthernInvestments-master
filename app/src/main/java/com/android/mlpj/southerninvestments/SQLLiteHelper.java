@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.design.widget.Snackbar;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ public class SQLLiteHelper extends SQLiteOpenHelper{
                 "id INTEGER NOT NULL,\n" +
                 "loan_no INTTEGER NOT NULL,\n" +
                 "interest_rate FLOAT NOT NULL,\n" +
+                "loan_amount FLOAT NOT NULL,\n" +
                 "installment_amount FLOAT NOT NULL,\n" +
                 "no_of_installments INTEGER NOT NULL,\n" +
                 "start_date TIMESTAMP,\n" +
@@ -101,6 +103,7 @@ public class SQLLiteHelper extends SQLiteOpenHelper{
         contentValues.put("id", loan.getId());
         contentValues.put("loan_no", loan.getLoanNo());
         contentValues.put("interest_rate", loan.getInterestRate());
+        contentValues.put("loan_amount",loan.getLoan_amount());
         contentValues.put("installment_amount", loan.getInstallmentAmount());
         contentValues.put("no_of_installments", loan.getNoOfInstallments());
         contentValues.put("start_date", loan.getStartDate());
@@ -152,5 +155,27 @@ public class SQLLiteHelper extends SQLiteOpenHelper{
         db.delete("Customer", null, null);
         db.delete("CustomerLoan", null, null);
         db.delete("LoanRepayment", null, null);
+    }
+
+    public List<DueLoansDetails> getDueLoans(){
+        SQLiteDatabase d_Loans = this.getReadableDatabase();
+        Cursor get_D_Loans = d_Loans.rawQuery("select name,NIC,loan_amount,no_of_installments,CustomerLoan.id" +
+                " from Customer,CustomerLoan where Customer.id = CustomerLoan.customer_id and status = 'ongoing' ",null);
+
+        get_D_Loans.moveToFirst();
+
+
+        List<DueLoansDetails> dueLoansDetailsList = new ArrayList<>();
+
+                while (get_D_Loans.isAfterLast()==false){
+                    Cursor get_Repayments = d_Loans.rawQuery("select installment_count,remaining_amount " +
+                            " from LoanRepayment where LoanRepayment.loan_id = "+ get_D_Loans.getInt(4),null);
+                            get_Repayments.moveToLast();
+
+                    DueLoansDetails newDueLoans = new DueLoansDetails(get_D_Loans.getString(0),get_D_Loans.getString(1),get_Repayments.getString(1),get_D_Loans.getString(2),get_Repayments.getString(0),get_D_Loans.getString(3));
+                    dueLoansDetailsList.add(newDueLoans);
+                    get_D_Loans.moveToNext();
+                }
+                return dueLoansDetailsList;
     }
 }

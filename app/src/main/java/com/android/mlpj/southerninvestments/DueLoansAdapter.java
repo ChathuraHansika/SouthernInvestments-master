@@ -2,6 +2,7 @@ package com.android.mlpj.southerninvestments;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,7 +17,7 @@ public class DueLoansAdapter extends RecyclerView.Adapter<DueLoansAdapter.ViewHo
     private List<DueLoansDetails> mDueLoans;
     private Context mContext;
 
-    public DueLoansAdapter(List<DueLoansDetails> mDueLoans, Context mContext) {
+    public DueLoansAdapter(List<DueLoansDetails> mDueLoans, Context mContext, FragmentManager fragmentManager) {
         this.mDueLoans = mDueLoans;
         this.mContext = mContext;
     }
@@ -31,7 +32,11 @@ public class DueLoansAdapter extends RecyclerView.Adapter<DueLoansAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.Name.setText(mDueLoans.get(position).getName());
-        holder.Email.setText(mDueLoans.get(position).getNICNumber());
+        holder.NIC.setText(mDueLoans.get(position).getNIC());
+        holder.Remaining_Amount.setText(mDueLoans.get(position).getRemaining_amount());
+        holder.Total_Amount.setText(mDueLoans.get(position).getAmount());
+        holder.Remaining_date.setText(mDueLoans.get(position).getInstallment_count());
+        holder.Total_date.setText(mDueLoans.get(position).getNo_of_installments());
         holder.Card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,15 +55,23 @@ public class DueLoansAdapter extends RecyclerView.Adapter<DueLoansAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public   TextView Name;
-        public   TextView Email;
+        public   TextView NIC;
+        public   TextView Remaining_Amount;
+        public   TextView Total_Amount;
+        public   TextView Remaining_date;
+        public   TextView Total_date;
         public   CardView Card;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            Name              = itemView.findViewById(R.id.D_Name);
-            Email             = itemView.findViewById(R.id.D_Id);
-            Card              = itemView.findViewById(R.id.D_card);
+            Name                 = itemView.findViewById(R.id.D_Name);
+            NIC                  = itemView.findViewById(R.id.D_NIC);
+            Remaining_Amount     = itemView.findViewById(R.id.tv_paid_amount);
+            Total_Amount         = itemView.findViewById(R.id.tv_total_amount);
+            Remaining_date       = itemView.findViewById(R.id.tv_paid_installments);
+            Total_date           = itemView.findViewById(R.id.tv_total_installments);
+            Card                 = itemView.findViewById(R.id.D_card);
         }
         }
 

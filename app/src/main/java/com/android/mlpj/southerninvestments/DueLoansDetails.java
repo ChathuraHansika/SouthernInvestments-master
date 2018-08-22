@@ -1,37 +1,69 @@
 package com.android.mlpj.southerninvestments;
 
-import com.google.gson.annotations.SerializedName;
+
 
 public class DueLoansDetails {
-    @SerializedName("userName")
-    private String Name;
-    @SerializedName("email")
-    private String NICNumber;
+    private String name;
+    private String NIC;
+    private String remaining_amount;
+    private String amount;
+    private String installment_count;
+    private String no_of_installments;
 
-
-    private String Payment_Amount;
-    private String Elapse_Time;
-
-    public DueLoansDetails(String name, String NICNumber, String payment_Amount, String elapse_Time) {
-        Name = name;
-        this.NICNumber = NICNumber;
-        Payment_Amount = payment_Amount;
-        Elapse_Time = elapse_Time;
+    public DueLoansDetails(String name, String NIC, String remaining_amount, String amount, String installment_count, String no_of_installments) {
+        this.name = name;
+        this.NIC = NIC;
+        this.remaining_amount = remaining_amount;
+        this.amount = amount;
+        this.installment_count = installment_count;
+        this.no_of_installments = no_of_installments;
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
-    public String getNICNumber() {
-        return NICNumber;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getPayment_Amount() {
-        return Payment_Amount;
+    public String getNIC() {
+        return NIC;
     }
 
-    public String getElapse_Time() {
-        return Elapse_Time;
+    public void setNIC(String NIC) {
+        this.NIC = NIC;
+    }
+
+    public String getRemaining_amount() {
+        return remaining_amount;
+    }
+
+    public void setRemaining_amount(String remaining_amount) {
+        this.remaining_amount = remaining_amount;
+    }
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
+
+    public String getInstallment_count() {
+        return installment_count;
+    }
+
+    public void setInstallment_count(String installment_count) {
+        this.installment_count = installment_count;
+    }
+
+    public String getNo_of_installments() {
+        return no_of_installments;
+    }
+
+    public void setNo_of_installments(String no_of_installments) {
+        this.no_of_installments = no_of_installments;
     }
 }
