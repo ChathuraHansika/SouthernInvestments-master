@@ -15,12 +15,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private UserLocalStore mUserLocalStore;
     private SQLLiteHelper mSqlLiteHelper;
+    private boolean backPressedOnce;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +47,7 @@ public class MainActivity extends AppCompatActivity
         setTitle("Dashboard");
         Fragment fragment = new DashboardFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment, "DASH_BOARD_FRAGMENT").commit();
     }
 
     @Override
@@ -54,8 +56,30 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+            //checking whether user is in the dashboard
+            DashboardFragment dashboardFragment = (DashboardFragment) fragmentManager.findFragmentByTag("DASH_BOARD_FRAGMENT");
+            if (dashboardFragment != null && dashboardFragment.isVisible()) {
+                if(backPressedOnce){
+                    //close application
+                    super.onBackPressed();
+                    return;
+                }else{
+                    backPressedOnce = true;
+                    Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT).show();
+                }
+            }else{
+                //if not in dashboard
+                Fragment fragment = new DashboardFragment();
+                fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment, "DASH_BOARD_FRAGMENT").commit();
+            }
         }
+    }
+
+    public void setBackPressedOnce(){
+        backPressedOnce = false;
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

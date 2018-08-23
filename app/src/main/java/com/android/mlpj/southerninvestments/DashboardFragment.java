@@ -29,7 +29,6 @@ public class DashboardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
         mCustomerList  = view.findViewById(R.id.customerList);
@@ -89,4 +88,9 @@ public class DashboardFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        ((MainActivity)getActivity()).setBackPressedOnce();
+    }
 }
