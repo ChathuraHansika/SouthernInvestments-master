@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -13,6 +14,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,11 +47,26 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         //set status(active...)
+        String status = mCustomersDetails.get(position).getStatus().toUpperCase();
         holder.mName.setText(mCustomersDetails.get(position).getName());
-        holder.mStatus.setText(mCustomersDetails.get(position).getStatus());
+        holder.mStatus.setText(status);
         holder.mCustomerNo.setText(mCustomersDetails.get(position).getCustomerNo());
         holder.mPhoneNo.setText(mCustomersDetails.get(position).getPhoneNo());
+        // change card's text view status's condition
+        if(status.equals("ONGOING")){
+            holder.mStatus.setTextColor(Color.parseColor("#009900"));
+        }else if(status.equals("ACTIVE")){
+            holder.mStatus.setTextColor(Color.parseColor("#3333ff"));
+        }else {
+           // holder.mName.setTextColor(Color.parseColor("#cc0000"));
+            holder.mStatus.setTextColor(Color.parseColor("#cc0000"));
+          //  holder.mCustomerNo.setTextColor(Color.parseColor("#cc0000"));
+          //  holder.mPhoneNo.setTextColor(Color.parseColor("#cc0000"));
+          //  holder.cardView.setCardBackgroundColor(Color.parseColor("#ffcccc"));
+
+        }
 /*
+
 
         holder.popUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,16 +116,18 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
       public   TextView mCustomerNo;
       public   TextView mPhoneNo;
       public   ImageButton call;
+      public   CardView cardView;
 
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            mName              = itemView.findViewById(R.id.tv_c_name);
-            mStatus             = itemView.findViewById(R.id.tv_status);
-            mCustomerNo         =itemView.findViewById(R.id.tv_c_no);
-            mPhoneNo             =itemView.findViewById(R.id.tv_phoneNumber);
-            call              = itemView.findViewById(R.id.btn_call);
+            mName           = itemView.findViewById(R.id.tv_c_name);
+            mStatus         = itemView.findViewById(R.id.tv_status);
+            mCustomerNo     =itemView.findViewById(R.id.tv_c_no);
+            mPhoneNo        =itemView.findViewById(R.id.tv_phoneNumber);
+            call            = itemView.findViewById(R.id.btn_call);
+            cardView            =itemView.findViewById(R.id.card);
         }
     }
 

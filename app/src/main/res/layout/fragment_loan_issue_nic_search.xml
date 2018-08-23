@@ -13,17 +13,26 @@
         android:gravity="center"
         android:padding="10dp">
 
-        <EditText
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter NIC no"
-            android:gravity="center" />
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp">
+
+            <EditText
+                android:id="@+id/input_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter NIC Number..."
+                android:inputType="text" />
+        </android.support.design.widget.TextInputLayout>
 
         <Button
             android:id="@+id/btn_issue_loan"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Issue Loan"
+            android:background="@drawable/btnshape"
             android:gravity="center"
 
             />

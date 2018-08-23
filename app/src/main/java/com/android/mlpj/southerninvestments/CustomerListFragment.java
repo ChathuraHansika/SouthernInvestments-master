@@ -129,8 +129,11 @@ public class CustomerListFragment extends Fragment implements SearchView.OnQuery
         input = input.toLowerCase();
         final List<CustomerDetails> filtredModel = new ArrayList<>();
         for(CustomerDetails model : cls){
-            final String text = model.getName().toLowerCase();
-            if(text.startsWith(input)){
+            final String name = model.getName().toLowerCase();
+            final String customerNumber = model.getCustomerNo().toLowerCase();
+            if(name.startsWith(input)){
+                filtredModel.add(model);
+            }else if(customerNumber.startsWith(input)){
                 filtredModel.add(model);
             }
         }
