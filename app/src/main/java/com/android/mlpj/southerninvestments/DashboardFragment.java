@@ -78,6 +78,14 @@ public class DashboardFragment extends Fragment {
                 fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment).commit();
             }
         });
+        mLoanRePayment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fragment = new EnterCustomerNumberFragment();
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment).commit();
+            }
+        });
         return view;
     }
 

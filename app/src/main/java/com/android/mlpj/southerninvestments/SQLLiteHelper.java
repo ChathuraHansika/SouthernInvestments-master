@@ -157,6 +157,23 @@ public class SQLLiteHelper extends SQLiteOpenHelper{
         db.delete("LoanRepayment", null, null);
     }
 
+    public Cursor getCustomerByNo(int customerNo){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery( "select * from Customer where customer_no = " + customerNo, null );
+        res.moveToFirst();
+        return res;
+    }
+
+    public Cursor getRepaymentByCustomerId(int customerId){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery( "select remaining_amount, installment_count, CustomerLoan.id, no_of_installments from Customer, CustomerLoan, LoanRepayment where Customer.id = "
+                + customerId + " And Customer.id = Customerloan.customer_id AND LoanRepayment.loan_id = CustomerLoan.id", null );
+        res.moveToFirst();
+        return res;
+    }
+
+
+
     public List<DueLoansDetails> getDueLoans(){
         SQLiteDatabase d_Loans = this.getReadableDatabase();
         Cursor get_D_Loans = d_Loans.rawQuery("select name,NIC,loan_amount,no_of_installments,CustomerLoan.id" +
