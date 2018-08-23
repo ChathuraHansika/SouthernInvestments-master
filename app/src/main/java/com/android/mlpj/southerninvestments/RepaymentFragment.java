@@ -1,9 +1,11 @@
 package com.android.mlpj.southerninvestments;
 
 
+import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.InputFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +15,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +38,7 @@ public class RepaymentFragment extends Fragment {
     private EditText mEtRepaymentAmount, mEtChequeNo;
     private Switch mSwitchCheque;
     private Button mBtnPay;
+    private ProgressDialog mProgressDialog;
 
     private boolean isCheque;
     private int loanId, totalNoOfInstallments;
@@ -80,6 +84,7 @@ public class RepaymentFragment extends Fragment {
         mBtnPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mBtnPay.setEnabled(false);
                 makeRequest();
             }
         });
@@ -114,6 +119,12 @@ public class RepaymentFragment extends Fragment {
     }
 
     public void makeRequest(){
+
+        mProgressDialog = new ProgressDialog(getContext());
+        mProgressDialog.setTitle("Processing...");
+        mProgressDialog.setMessage("Making installment");
+        mProgressDialog.show();
+
         float cashAmount, bankAmount;
         String chequeNo;
         if(!mSwitchCheque.isChecked()){
@@ -139,10 +150,19 @@ public class RepaymentFragment extends Fragment {
             @Override
             public void onResponse(Call<RepaymentDoneResponse> call, Response<RepaymentDoneResponse> response) {
                 if(response.code() == 200){
-                    Toast.makeText(getContext(), "Success : " + Boolean.toString(!response.body().isError()), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Successfully entered the installment ", Toast.LENGTH_LONG).show();
                     Repayment newRepayment = response.body().getRepayments();
                     sqlLiteHelper.insertRepayments(newRepayment);
-                    updateView();
+                    mProgressDialog.dismiss();
+
+                    Fragment fragment = new EnterCustomerNumberFragment();
+                    FragmentManager fragmentManager =getFragmentManager();
+                    fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment).addToBackStack(null).commit();
+                }else{
+                    Toast.makeText(getContext(), "Failed to make installment", Toast.LENGTH_LONG).show();
+                    mBtnPay.setEnabled(true);
+                    mProgressDialog.dismiss();
                 }
             }
 
