@@ -46,6 +46,8 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
         //set status(active...)
         holder.Name.setText(mCustomersDetails.get(position).getName());
         holder.Email.setText(mCustomersDetails.get(position).getEmail());
+/*
+
         holder.popUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,6 +60,7 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
 
             }
         });
+*/
 
         holder.call.setOnClickListener(new View.OnClickListener() {
             @Override
