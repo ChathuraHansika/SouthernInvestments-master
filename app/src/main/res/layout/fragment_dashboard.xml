@@ -51,6 +51,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="Customer Details"
+                        android:textColor="#ffffff"
                         android:textStyle="bold" />
 
                     <View
@@ -97,6 +98,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="Daily Summary"
+                        android:textColor="#ffffff"
                         android:textStyle="bold" />
 
                     <View
@@ -152,6 +154,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="Enter Installment"
+                        android:textColor="#ffffff"
                         android:textStyle="bold" />
 
                     <View
@@ -198,6 +201,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="Installment Progress"
+                        android:textColor="#ffffff"
                         android:textStyle="bold" />
 
                     <View
@@ -254,6 +258,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="Issue a Loan"
+                        android:textColor="#ffffff"
                         android:textStyle="bold" />
 
                     <View
