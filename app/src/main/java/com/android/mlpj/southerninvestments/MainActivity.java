@@ -22,7 +22,9 @@ public class MainActivity extends AppCompatActivity
 
     private UserLocalStore mUserLocalStore;
     private SQLLiteHelper mSqlLiteHelper;
-    private boolean backPressedOnce;
+
+    private static final int TIME_INTERVAL = 2000; // # milliseconds, desired time passed between two back presses.
+    private long mBackPressed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,24 +64,20 @@ public class MainActivity extends AppCompatActivity
             //checking whether user is in the dashboard
             DashboardFragment dashboardFragment = (DashboardFragment) fragmentManager.findFragmentByTag("DASH_BOARD_FRAGMENT");
             if (dashboardFragment != null && dashboardFragment.isVisible()) {
-                if(backPressedOnce){
-                    //close application
+                if (mBackPressed + TIME_INTERVAL > System.currentTimeMillis())
+                {
                     super.onBackPressed();
                     return;
-                }else{
-                    backPressedOnce = true;
-                    Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT).show();
                 }
+                else { Toast.makeText(getBaseContext(), "Tap back button twice in order to exit", Toast.LENGTH_SHORT).show(); }
+
+                mBackPressed = System.currentTimeMillis();
             }else{
                 //if not in dashboard
                 Fragment fragment = new DashboardFragment();
                 fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment, "DASH_BOARD_FRAGMENT").commit();
             }
         }
-    }
-
-    public void setBackPressedOnce(){
-        backPressedOnce = false;
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

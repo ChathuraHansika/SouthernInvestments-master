@@ -89,10 +89,4 @@ public class DashboardFragment extends Fragment {
         });
         return view;
     }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        ((MainActivity)getActivity()).setBackPressedOnce();
-    }
 }
