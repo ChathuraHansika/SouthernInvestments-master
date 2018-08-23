@@ -25,6 +25,7 @@
                 android:src="@drawable/profile_pic" />
 
             <TextView
+                android:id="@+id/tv_sales_rep_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -50,6 +51,7 @@
             android:src="@drawable/ic_route" />
 
         <TextView
+            android:id="@+id/tv_route"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -72,6 +74,7 @@
             android:src="@drawable/ic_perm_identity" />
 
         <TextView
+            android:id="@+id/tv_nic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -94,6 +97,7 @@
             android:src="@drawable/ic_local_phone" />
 
         <TextView
+            android:id="@+id/tv_telephone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -116,6 +120,7 @@
             android:src="@drawable/ic_email" />
 
         <TextView
+            android:id="@+id/tv_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -138,6 +143,7 @@
             android:src="@drawable/ic_add_location" />
 
         <TextView
+            android:id="@+id/tv_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
