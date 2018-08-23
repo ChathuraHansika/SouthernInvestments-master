@@ -27,6 +27,8 @@ public class EnterCustomerNumberFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_enter_customer_number, container, false);
 
+        ((MainActivity)getActivity()).setTitle("Enter customer number");
+
         mEtInputCustomerNumber = view.findViewById(R.id.input_customer_number);
         mBtnAddCustomerNumber = view.findViewById(R.id.add_customer_number);
         sqlLiteHelper = new SQLLiteHelper(getContext());

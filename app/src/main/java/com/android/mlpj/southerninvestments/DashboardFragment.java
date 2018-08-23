@@ -31,6 +31,8 @@ public class DashboardFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
+        ((MainActivity)getActivity()).setTitle("Home");
+
         mCustomerList  = view.findViewById(R.id.customerList);
         mDailySummary  = view.findViewById(R.id.dailySummary);
         mLoanRePayment = view.findViewById(R.id.loanRepayment);

@@ -46,6 +46,9 @@ public class RepaymentFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_repayment, container, false);
 
+        ((MainActivity)getActivity()).setTitle("Make installment here");
+
+
         mTvCustomerNo = view.findViewById(R.id.tv_customer_number);
         mTvName = view.findViewById(R.id.tv_name);
         mTvNic = view.findViewById(R.id.tv_nic);

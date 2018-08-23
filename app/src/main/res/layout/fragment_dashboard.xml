@@ -50,7 +50,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="Customer List"
+                        android:text="Customer Details"
                         android:textStyle="bold" />
 
                     <View
@@ -64,7 +64,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:padding="5dp"
-                        android:text="Check your customer list"
+                        android:text="See your customer details"
                         android:textColor="@android:color/darker_gray" />
 
                 </LinearLayout>
@@ -110,7 +110,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:padding="5dp"
-                        android:text="Check your daily report"
+                        android:text="Check your daily summary"
                         android:textColor="@android:color/darker_gray" />
 
                 </LinearLayout>
@@ -151,7 +151,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="Add"
+                        android:text="Enter Installment"
                         android:textStyle="bold" />
 
                     <View
@@ -165,7 +165,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:padding="5dp"
-                        android:text="Check your bank activities"
+                        android:text="Enter customer installments here"
                         android:textColor="@android:color/darker_gray" />
 
                 </LinearLayout>
@@ -197,7 +197,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="Due Loans"
+                        android:text="Installment Progress"
                         android:textStyle="bold" />
 
                     <View
@@ -211,7 +211,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:padding="5dp"
-                        android:text="Check your bank activities"
+                        android:text="See your loan progress here"
                         android:textColor="@android:color/darker_gray" />
 
                 </LinearLayout>
@@ -253,7 +253,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="Loan Issue"
+                        android:text="Issue a Loan"
                         android:textStyle="bold" />
 
                     <View

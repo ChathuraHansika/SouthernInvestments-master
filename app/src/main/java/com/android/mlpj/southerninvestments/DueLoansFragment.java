@@ -40,7 +40,9 @@ public class DueLoansFragment extends Fragment  {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
+        ((MainActivity)getActivity()).setTitle("Loan Progress");
+
         View view = inflater.inflate(R.layout.fragment_due_loans, container, false);
         mRecyclerView = view.findViewById(R.id.recycle_dueLoans_list);
         mRecyclerView.setHasFixedSize(true);

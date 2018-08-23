@@ -14,15 +14,12 @@ import android.view.ViewGroup;
 public class DailyCollectionsFragment extends Fragment {
 
 
-    public DailyCollectionsFragment() {
-        // Required empty public constructor
-    }
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
+        ((MainActivity)getActivity()).setTitle("Daily Summary");
+
         return inflater.inflate(R.layout.fragment_daily_collections, container, false);
     }
 

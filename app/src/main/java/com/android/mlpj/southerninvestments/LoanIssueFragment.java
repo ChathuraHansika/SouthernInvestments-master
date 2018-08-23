@@ -13,15 +13,12 @@ import android.view.ViewGroup;
  */
 public class LoanIssueFragment extends Fragment {
 
-
-    public LoanIssueFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
+        ((MainActivity)getActivity()).setTitle("Issue Loan");
+
         return inflater.inflate(R.layout.fragment_loan_issue, container, false);
     }
 

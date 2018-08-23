@@ -26,6 +26,7 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        ((MainActivity)getActivity()).setTitle("Your Profile");
 
         profImage = view.findViewById(R.id.profile_image);
         tvName = view.findViewById(R.id.tv_sales_rep_name);
