@@ -44,8 +44,10 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         //set status(active...)
-        holder.Name.setText(mCustomersDetails.get(position).getName());
-        holder.Email.setText(mCustomersDetails.get(position).getEmail());
+        holder.mName.setText(mCustomersDetails.get(position).getName());
+        holder.mStatus.setText(mCustomersDetails.get(position).getStatus());
+        holder.mCustomerNo.setText(mCustomersDetails.get(position).getCustomerNo());
+        holder.mPhoneNo.setText(mCustomersDetails.get(position).getPhoneNo());
 /*
 
         holder.popUp.setOnClickListener(new View.OnClickListener() {
@@ -91,20 +93,21 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-      public   TextView Name;
-      public   TextView Email;
-      public   CardView Card;
+      public   TextView mName;
+      public   TextView mStatus;
+      public   TextView mCustomerNo;
+      public   TextView mPhoneNo;
       public   ImageButton call;
-      public   ImageButton popUp;
+
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            Name              = itemView.findViewById(R.id.head);
-            Email             = itemView.findViewById(R.id.description);
-            Card              = itemView.findViewById(R.id.card);
+            mName              = itemView.findViewById(R.id.tv_c_name);
+            mStatus             = itemView.findViewById(R.id.tv_status);
+            mCustomerNo         =itemView.findViewById(R.id.tv_c_no);
+            mPhoneNo             =itemView.findViewById(R.id.tv_phoneNumber);
             call              = itemView.findViewById(R.id.btn_call);
-            popUp             = itemView.findViewById(R.id.touch_dots);
         }
     }
 

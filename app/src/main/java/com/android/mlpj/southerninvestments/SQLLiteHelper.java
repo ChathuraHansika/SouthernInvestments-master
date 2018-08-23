@@ -140,7 +140,7 @@ public class SQLLiteHelper extends SQLiteOpenHelper{
         List<CustomerDetails> customer_list = new ArrayList<CustomerDetails>();
 
         while(res.isAfterLast() == false){
-            CustomerDetails newCustomer = new CustomerDetails(res.getString(2),res.getString(3));
+            CustomerDetails newCustomer = new CustomerDetails(res.getString(2),res.getString(1),res.getString(6),res.getString(5));
             customer_list.add(newCustomer);
             res.moveToNext();
         }
