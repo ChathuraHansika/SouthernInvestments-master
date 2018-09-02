@@ -27,6 +27,7 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
     private List<CustomerDetails> mCustomersDetails;
     private Context mContext;
     private FragmentManager fragmentManager;
+    private String phoneNum;
 
     public CustomerListAdapter(List<CustomerDetails> customerDetails, Context context, FragmentManager fragmentManager) {
         this.mCustomersDetails = customerDetails;
@@ -45,7 +46,7 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
 
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         //set status(active...)
         String status = mCustomersDetails.get(position).getStatus().toUpperCase();
         holder.mName.setText(mCustomersDetails.get(position).getName());
@@ -65,6 +66,7 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
           //  holder.cardView.setCardBackgroundColor(Color.parseColor("#ffcccc"));
 
         }
+        phoneNum =  mCustomersDetails.get(position).getPhoneNo().toString();
 /*
 
 
@@ -87,7 +89,7 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
             public void onClick(View v) {
                 Toast.makeText(mContext, "hello", Toast.LENGTH_SHORT).show();
                 Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:" + "0714545852"));
+                callIntent.setData(Uri.parse("tel:" +phoneNum ));
                 if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                     // TODO: Consider calling
                     //    ActivityCompat#requestPermissions
@@ -124,10 +126,10 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
 
             mName           = itemView.findViewById(R.id.tv_c_name);
             mStatus         = itemView.findViewById(R.id.tv_status);
-            mCustomerNo     =itemView.findViewById(R.id.tv_c_no);
-            mPhoneNo        =itemView.findViewById(R.id.tv_phoneNumber);
+            mCustomerNo     = itemView.findViewById(R.id.tv_c_no);
+            mPhoneNo        = itemView.findViewById(R.id.tv_phoneNumber);
             call            = itemView.findViewById(R.id.btn_call);
-            cardView            =itemView.findViewById(R.id.card);
+            cardView        = itemView.findViewById(R.id.card);
         }
     }
 
