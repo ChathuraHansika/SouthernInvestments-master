@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -31,17 +32,30 @@ public class DailyCollectionAdapter extends RecyclerView.Adapter<DailyCollection
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        holder.mId.setText(mDailyCollectionDetails.get(position).getId());
+        holder.mName.setText(mDailyCollectionDetails.get(position).getName());
+        holder.mAmount.setText(mDailyCollectionDetails.get(position).getAmount());
 
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mDailyCollectionDetails.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        public   TextView mId;
+        public   TextView mName;
+        public   TextView mAmount;
+
+
         public ViewHolder(View itemView) {
             super(itemView);
+
+            mId = itemView.findViewById(R.id.dailySummary_id);
+            mName= itemView.findViewById(R.id.dailySummary_name);
+            mAmount = itemView.findViewById(R.id.dailySummary_amount);
+
         }
     }
 }

@@ -195,4 +195,8 @@ public class SQLLiteHelper extends SQLiteOpenHelper{
                 }
                 return dueLoansDetailsList;
     }
+//    public List<DailyCollectionDetails> getDailyCollection(){
+//        SQLiteDatabase db = this.getReadableDatabase();
+//        Cursor res = db.rawQuery("",null);
+//    }
 }
