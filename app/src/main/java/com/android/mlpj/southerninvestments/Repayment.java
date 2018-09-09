@@ -100,7 +100,8 @@ public class Repayment {
     }
 
     public String getCreatedAt() {
-        return createdAt;
+        String[] parts = createdAt.split(" ");
+        return parts[0];
     }
 
     public void setCreatedAt(String createdAt) {

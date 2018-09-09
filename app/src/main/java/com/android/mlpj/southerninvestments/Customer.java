@@ -121,7 +121,8 @@ public class Customer {
     }
 
     public String getCreated_at() {
-        return created_at;
+        String[] parts = created_at.split(" ");
+        return parts[0];
     }
 
     public void setCreated_at(String created_at) {

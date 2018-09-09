@@ -24,6 +24,14 @@ public interface ApiInterface {
                                 @Field("bank_amount") float bank_amount,
                                 @Field("cheque_no") String cheque_no);
 
+    @POST("api/editCustomerRepayments")
+    @FormUrlEncoded
+    Call<RepaymentDoneResponse> editRepayment(@Field("repayment_id") int repayment_id,
+                                              @Field("cash_amount") float cash_amount,
+                                              @Field("repayment_date") String repayment_date,
+                                              @Field("bank_amount") float bank_amount,
+                                              @Field("cheque_no") String cheque_no);
+
     @GET("Hotel")
     Call<List<CustomerDetails>> getDetails();
 

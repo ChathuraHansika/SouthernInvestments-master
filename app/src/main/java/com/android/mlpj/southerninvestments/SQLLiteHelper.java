@@ -90,7 +90,7 @@ public class SQLLiteHelper extends SQLiteOpenHelper{
         contentValues.put("addLine2", customer.getAddLine2());
         contentValues.put("city", customer.getCity());
         contentValues.put("salesRep_id", customer.getSalesRep_id());
-        //contentValues.put("created_at", customer.getCreated_at());
+        contentValues.put("created_at", customer.getCreated_at());
         //contentValues.put("updated_at", customer.getUpdated_at());
 
         return db.insert("Customer", null, contentValues);
@@ -166,13 +166,19 @@ public class SQLLiteHelper extends SQLiteOpenHelper{
 
     public Cursor getRepaymentByCustomerId(int customerId){
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery( "select remaining_amount, installment_count, CustomerLoan.id, no_of_installments from Customer, CustomerLoan, LoanRepayment where Customer.id = "
-                + customerId + " And Customer.id = Customerloan.customer_id AND LoanRepayment.loan_id = CustomerLoan.id", null );
+        Cursor res =  db.rawQuery( "select remaining_amount, installment_count, CustomerLoan.id, no_of_installments,LoanRepayment.created_at, LoanRepayment.amount, LoanRepayment.id from Customer, CustomerLoan, LoanRepayment where Customer.id = "
+                + customerId + " And Customer.id = Customerloan.customer_id AND LoanRepayment.loan_id = CustomerLoan.id order by LoanRepayment.id desc", null );
         res.moveToFirst();
         return res;
     }
 
-
+    public void deleteReapymentById(int repaymentId){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String table = "LoanRepayment";
+        String whereClause = "id=?";
+        String[] whereArgs = new String[] { String.valueOf(repaymentId) };
+        db.delete(table, whereClause, whereArgs);
+    }
 
     public List<DueLoansDetails> getDueLoans(){
         SQLiteDatabase d_Loans = this.getReadableDatabase();
