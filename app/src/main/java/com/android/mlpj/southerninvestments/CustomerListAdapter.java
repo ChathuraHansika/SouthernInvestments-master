@@ -48,6 +48,8 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         //set status(active...)
+        phoneNum =  mCustomersDetails.get(position).getPhoneNo().toString();
+
         String status = mCustomersDetails.get(position).getStatus().toUpperCase();
         holder.mName.setText(mCustomersDetails.get(position).getName());
         holder.mStatus.setText(status);
@@ -66,7 +68,6 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
           //  holder.cardView.setCardBackgroundColor(Color.parseColor("#ffcccc"));
 
         }
-        phoneNum =  mCustomersDetails.get(position).getPhoneNo().toString();
 /*
 
 
@@ -87,7 +88,7 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
         holder.call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, "hello", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, phoneNum, Toast.LENGTH_SHORT).show();
                 Intent callIntent = new Intent(Intent.ACTION_CALL);
                 callIntent.setData(Uri.parse("tel:" +phoneNum ));
                 if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {

@@ -5,20 +5,33 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 public class SQLLiteHelper extends SQLiteOpenHelper{
     private static String dbName = "LocalDb.db";
     private Context context;
+    int totalAmount =0;
     public SQLLiteHelper(Context context) {
         super(context, dbName, null, 1);
         this.context = context;
         SQLiteDatabase db = this.getWritableDatabase();
+
     }
+
+
+
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -201,8 +214,24 @@ public class SQLLiteHelper extends SQLiteOpenHelper{
                 }
                 return dueLoansDetailsList;
     }
-//    public List<DailyCollectionDetails> getDailyCollection(){
-//        SQLiteDatabase db = this.getReadableDatabase();
-//        Cursor res = db.rawQuery("",null);
-//    }
+    public List<DailyCollectionDetails> getDailyCollection(){
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select customer_no,name,amount from Customer,CustomerLoan,LoanRepayment where Customer.id = CustomerLoan.customer_id and CustomerLoan.id = loan_id and LoanRepayment.created_at = date('now', 'localtime')",null);
+        res.moveToFirst();
+
+        List<DailyCollectionDetails> dailyCollection_list = new ArrayList<DailyCollectionDetails>();
+
+        while(res.isAfterLast() == false){
+
+            totalAmount = totalAmount + Integer.parseInt(res.getString(2));
+            DailyCollectionDetails newCollection = new DailyCollectionDetails(res.getString(0),res.getString(1),res.getString(2),totalAmount);
+            dailyCollection_list.add(newCollection);
+            res.moveToNext();
+        }
+
+//        Toast.makeText(context, totalAmount , Toast.LENGTH_SHORT).show();
+        return dailyCollection_list;
+    }
 }
+//LoanRepayment.created_at

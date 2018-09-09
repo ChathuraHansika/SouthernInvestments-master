@@ -4,8 +4,19 @@ public class DailyCollectionDetails {
 
     private String id;
     private String name;
-    private int amount;
+    private String amount;
     private int totalAmount;
+
+    public DailyCollectionDetails(String id, String name, String amount, int totalAmount) {
+        this.id = id;
+        this.name = name;
+        this.amount = amount;
+        this.totalAmount = totalAmount;
+    }
+
+    public DailyCollectionDetails() {
+
+    }
 
     public String getId() {
         return id;
@@ -23,11 +34,11 @@ public class DailyCollectionDetails {
         this.name = name;
     }
 
-    public int getAmount() {
+    public String getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(String amount) {
         this.amount = amount;
     }
 
@@ -36,14 +47,6 @@ public class DailyCollectionDetails {
     }
 
     public void setTotalAmount(int totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-
-    public DailyCollectionDetails(String id, String name, int amount, int totalAmount) {
-
-        this.id = id;
-        this.name = name;
-        this.amount = amount;
         this.totalAmount = totalAmount;
     }
 }
