@@ -27,6 +27,7 @@ public class DailyCollectionsFragment extends Fragment {
     private Context mContext;
     private SQLLiteHelper sqlLiteHelper;
     private TextView mTotalAmount;
+    private String Total;
 
 public DailyCollectionsFragment(){
 
@@ -51,12 +52,13 @@ public DailyCollectionsFragment(){
         //retrieving due_loans data from sqlite
         sqlLiteHelper = new SQLLiteHelper(getContext());
         mDailyCollectionDetails = sqlLiteHelper.getDailyCollection();
+        Total = String.valueOf(sqlLiteHelper.getDailyCollectionTotal());
         FragmentManager fragmentManager = getFragmentManager();
         mDailyCollectionAdapter = new DailyCollectionAdapter(mDailyCollectionDetails, getActivity(), fragmentManager);
         mRecyclerView.setAdapter(mDailyCollectionAdapter);
        DailyCollectionDetails dailyCollectionDetails = new DailyCollectionDetails();
 
-      mTotalAmount.setText(String.valueOf( dailyCollectionDetails.getTotalAmount()));
+      mTotalAmount.setText(Total);
 
 
 

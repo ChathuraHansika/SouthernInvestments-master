@@ -224,7 +224,7 @@ public class SQLLiteHelper extends SQLiteOpenHelper{
 
         while(res.isAfterLast() == false){
 
-            totalAmount = totalAmount + Integer.parseInt(res.getString(2));
+           // totalAmount = totalAmount + Integer.parseInt(res.getString(2));
             DailyCollectionDetails newCollection = new DailyCollectionDetails(res.getString(0),res.getString(1),res.getString(2),totalAmount);
             dailyCollection_list.add(newCollection);
             res.moveToNext();
@@ -232,6 +232,26 @@ public class SQLLiteHelper extends SQLiteOpenHelper{
 
 //        Toast.makeText(context, totalAmount , Toast.LENGTH_SHORT).show();
         return dailyCollection_list;
+    }
+    public int getDailyCollectionTotal(){
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select customer_no,name,amount from Customer,CustomerLoan,LoanRepayment where Customer.id = CustomerLoan.customer_id and CustomerLoan.id = loan_id and LoanRepayment.created_at = date('now', 'localtime')",null);
+        res.moveToFirst();
+       // totalAmount +=  Integer.parseInt(res.getString(2));
+
+        List<DailyCollectionDetails> dailyCollection_list = new ArrayList<DailyCollectionDetails>();
+
+        while(res.isAfterLast() == false){
+
+           totalAmount = totalAmount + Integer.parseInt(res.getString(2));
+            DailyCollectionDetails newCollection = new DailyCollectionDetails(res.getString(0),res.getString(1),res.getString(2),totalAmount);
+            dailyCollection_list.add(newCollection);
+            res.moveToNext();
+        }
+
+//        Toast.makeText(context, totalAmount , Toast.LENGTH_SHORT).show();
+        return totalAmount;
     }
 }
 //LoanRepayment.created_at
