@@ -56,7 +56,8 @@ public DailyCollectionsFragment(){
         mRecyclerView.setAdapter(mDailyCollectionAdapter);
        DailyCollectionDetails dailyCollectionDetails = new DailyCollectionDetails();
 
-       mTotalAmount.setText(String.valueOf(dailyCollectionDetails.getTotalAmount()));
+      mTotalAmount.setText(String.valueOf( dailyCollectionDetails.getTotalAmount()));
+
 
 
         return view;

@@ -1,11 +1,19 @@
 package com.android.mlpj.southerninvestments;
 
+import android.content.Context;
+
+import java.util.List;
+
 public class DailyCollectionDetails {
 
     private String id;
     private String name;
     private String amount;
     private int totalAmount;
+    private List<DailyCollectionDetails> mDailyCollectionDetails;
+    private SQLLiteHelper sqlLiteHelper;
+    private Context mContext;
+
 
     public DailyCollectionDetails(String id, String name, String amount, int totalAmount) {
         this.id = id;
@@ -14,7 +22,9 @@ public class DailyCollectionDetails {
         this.totalAmount = totalAmount;
     }
 
+
     public DailyCollectionDetails() {
+
 
     }
 
