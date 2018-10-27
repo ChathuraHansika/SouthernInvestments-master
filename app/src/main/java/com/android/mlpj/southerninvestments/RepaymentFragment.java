@@ -3,28 +3,23 @@ package com.android.mlpj.southerninvestments;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.bluetooth.BluetoothSocket;
 import android.content.DialogInterface;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.text.InputFilter;
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.ParseException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -35,12 +30,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static android.content.ContentValues.TAG;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class RepaymentFragment extends Fragment {
 
     View view;
@@ -48,14 +38,18 @@ public class RepaymentFragment extends Fragment {
     private TextView mTvCustomerNo, mTvName, mTvNic, mTvRemainingAmount, mTvInstallmentNo, mEditing;
     private EditText mEtRepaymentAmount, mEtChequeNo;
     private Switch mSwitchCheque;
-    private Button mBtnPay;
+    private Button mBtnPay, mBtnPrint;
     private ProgressDialog mProgressDialog;
 
-    private boolean isCheque, isEdit;
+    private boolean isCheque, isRepaymentDone, iseditEnabled;
     private int loanId, totalNoOfInstallments, repaymentId;
     private String currentDateString;
     private SQLLiteHelper sqlLiteHelper;
+    private BluetoothSocket mBluetoothSocket;
 
+    private String customerName;
+    float paidAmount, remainingAmount;
+    private UserLocalStore userLocalStore;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,7 +57,7 @@ public class RepaymentFragment extends Fragment {
 
         view = inflater.inflate(R.layout.fragment_repayment, container, false);
 
-        ((MainActivity)getActivity()).setTitle("Make installment here");
+        ((MainActivity) getActivity()).setTitle("Make installment here");
 
 
         mTvCustomerNo = view.findViewById(R.id.tv_customer_number);
@@ -77,10 +71,11 @@ public class RepaymentFragment extends Fragment {
         mBtnPay = view.findViewById(R.id.btn_pay_amount);
         mEditing = view.findViewById(R.id.tv_editing);
         mEditing.setVisibility(View.INVISIBLE);
+        mBtnPrint = view.findViewById(R.id.btn_print);
 
+        mEtRepaymentAmount.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(10, 2)});
 
-        mEtRepaymentAmount.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(10,2)});
-
+        userLocalStore = new UserLocalStore(getContext());
         /*mEtChequeNo.setEnabled(false);
         mSwitchCheque.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -95,8 +90,6 @@ public class RepaymentFragment extends Fragment {
             }
         });*/
 
-        updateView();
-
         mBtnPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,10 +98,70 @@ public class RepaymentFragment extends Fragment {
             }
         });
 
+        mBtnPrint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isRepaymentDone && iseditEnabled) {
+                    iseditEnabled = false;
+                    updateView();
+                }else if(isRepaymentDone && !iseditEnabled){
+                    Thread t = new Thread() {
+                        public void run() {
+                            try {
+                                OutputStream os = mBluetoothSocket
+                                        .getOutputStream();
+                                byte[] cc = new byte[]{0x1B,0x21,0x00};  // 0- normal size text
+                                byte[] bb = new byte[]{0x1B,0x21,0x08};  // 1- only bold text
+                                byte[] bb2 = new byte[]{0x1B,0x21,0x20}; // 2- bold with medium text
+                                byte[] bb3 = new byte[]{0x1B,0x21,0x10}; // 3- bold with large text
+
+                                byte[] PRINT_ALIGN_LEFT = new byte[] { 0x1b, 'a', 0x00 };
+                                byte[] PRINT_ALIGN_RIGHT = new byte[] { 0x1b, 'a', 0x02 };
+                                byte[] PRINT_ALIGN_CENTER = new byte[] { 0x1b, 'a', 0x01 };
+
+                                os.write(bb3);
+                                os.write(PRINT_ALIGN_CENTER);
+                                String bill = "Southern Investments\n";
+                                os.write(bill.getBytes());
+                                os.write(cc);
+                                os.write(PRINT_ALIGN_LEFT);
+                                String separator = "------------------------------\n";
+                                os.write(separator.getBytes());
+                                String name = "CUstomer : " + customerName + "\n";
+                                os.write(name.getBytes());  //todo: if name is lengthy
+                                String paid = String.format("Installment Paid : Rs.%.2f\n", paidAmount);
+                                os.write(paid.getBytes());
+                                String remaining = String.format("Remaining Amount : Rs.%.2f\n", remainingAmount);
+                                os.write(remaining.getBytes());
+                                os.write(separator.getBytes());
+                                String salesRepName = "Salesman name : " + userLocalStore.getUserDetails().getName() + "\n";
+                                os.write(salesRepName.getBytes());
+                                os.write(bb2);
+                                os.write(PRINT_ALIGN_CENTER);
+                                String thankYou = "Thank You\n\n\n\n";
+                                os.write(thankYou.getBytes());
+                            } catch (Exception e) {
+                                Log.e("MainActivity", "Exe ", e);
+                            }
+                        }
+                    };
+                    t.start();
+                }
+            }
+        });
+        updateView();
+
         return view;
     }
 
-    public void updateView(){
+    @Override
+    public void onResume() {
+        //get BT socket
+        super.onResume();
+        mBluetoothSocket = ((BaseApplication) getContext().getApplicationContext()).getmBluetoothSocket();
+    }
+
+    public void updateView() {
         sqlLiteHelper = new SQLLiteHelper(getContext());
 
         int customerNo = getArguments().getInt("CUSTOMER_NO");
@@ -124,17 +177,19 @@ public class RepaymentFragment extends Fragment {
 
         Cursor res = sqlLiteHelper.getCustomerByNo(customerNo);
         mTvCustomerNo.setText(res.getString(1));
-        mTvName.setText(res.getString(2));
+        customerName = res.getString(2);
+        mTvName.setText(customerName);
         mTvNic.setText(res.getString(4));
 
         int customerId = res.getInt(0);
         Cursor resRepayment = sqlLiteHelper.getRepaymentByCustomerId(customerId);
-        float remainingAmount = resRepayment.getFloat(0);
+        remainingAmount = resRepayment.getFloat(0);
+
         int installmentCount = resRepayment.getInt(1);
         loanId = resRepayment.getInt(2);
         totalNoOfInstallments = resRepayment.getInt(3);
         String repaymentDate = resRepayment.getString(4);
-        float repaymentAmount = resRepayment.getFloat(5);
+        paidAmount = resRepayment.getFloat(5);
         repaymentId = resRepayment.getInt(6);
 
         //Toast.makeText(getContext(), "" + remainingAmount + " " + installmentCount + " " + loanId , Toast.LENGTH_LONG).show();
@@ -143,27 +198,57 @@ public class RepaymentFragment extends Fragment {
         mTvInstallmentNo.setText(Integer.toString(totalNoOfInstallments - installmentCount));
 
         //check whether edit or new payment
-        isEdit = repaymentDate.equals(currentDateString);
-        if(isEdit){
+        isRepaymentDone = repaymentDate.equals(currentDateString);
+
+        if (!isRepaymentDone) {
+            mBtnPrint.setVisibility(View.INVISIBLE);
+            mBtnPay.setText("Pay");
+            mBtnPay.setEnabled(true);
+            view.setBackgroundColor(getResources().getColor(R.color.backgroundColor));
+            mEditing.setVisibility(View.INVISIBLE);
+            mEtRepaymentAmount.setText("");
+            mEtRepaymentAmount.setEnabled(true);
+        }
+        if (isRepaymentDone && iseditEnabled) {
             //Toast.makeText(getContext(), "ok", Toast.LENGTH_SHORT).show();
             mBtnPay.setText("Save edit");
+            mBtnPay.setEnabled(true);
+            mBtnPrint.setText("Cancel Edit");
+            mBtnPrint.setVisibility(View.VISIBLE);
             view.setBackgroundColor(getResources().getColor(R.color.colorBlue));
+            mEditing.setText("You are going to edit the already entered installment");
             mEditing.setVisibility(View.VISIBLE);
-            mEtRepaymentAmount.setText(Float.toString(repaymentAmount));
+            mEtRepaymentAmount.setText(Float.toString(paidAmount));
+            mEtRepaymentAmount.setEnabled(true);
+        }
+        if (isRepaymentDone && !iseditEnabled) {
+            //Toast.makeText(getContext(), "ok", Toast.LENGTH_SHORT).show();
+            mBtnPay.setText("Edit Installment");
+            mBtnPay.setEnabled(true);
+            mBtnPrint.setVisibility(View.VISIBLE);
+            mBtnPrint.setText("Print");
+            view.setBackgroundColor(getResources().getColor(R.color.colorBlue));
+            mEditing.setText("You have entered the installment");
+            mEditing.setVisibility(View.VISIBLE);
+            mEtRepaymentAmount.setText(Float.toString(paidAmount));
+            mEtRepaymentAmount.setEnabled(false);
         }
     }
 
-    public void makeRequest(){
-        if(isEdit){
+    public void makeRequest() {
+        if (isRepaymentDone && iseditEnabled) {
             editRepayment();
-        }else{
+        } else if (isRepaymentDone && !iseditEnabled) {
+            iseditEnabled = true;
+            updateView();
+        } else if (!isRepaymentDone) {
             makeRepaymentForFirstTime();
         }
 
     }
 
 
-    public void makeRepaymentForFirstTime(){
+    public void makeRepaymentForFirstTime() {
         mProgressDialog = new ProgressDialog(getContext());
         mProgressDialog.setTitle("Processing...");
         mProgressDialog.setMessage("Making installment");
@@ -181,35 +266,70 @@ public class RepaymentFragment extends Fragment {
             chequeNo = mEtChequeNo.getText().toString();
         }*/
 
-        cashAmount = Float.parseFloat(mEtRepaymentAmount.getText().toString());
-        bankAmount = 0;
-        chequeNo = "";
+        String stringCashAmount = mEtRepaymentAmount.getText().toString();
+        if (!stringCashAmount.equals("")) {
+            cashAmount = Float.parseFloat(stringCashAmount);
+            bankAmount = 0;
+            chequeNo = "";
 
-        Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("http://www.southernpropertydevelopers.com/")
-                .addConverterFactory(GsonConverterFactory.create());
-        Retrofit retrofit = builder.build();
+            Retrofit.Builder builder = new Retrofit.Builder()
+                    .baseUrl("http://www.southernpropertydevelopers.com/")
+                    .addConverterFactory(GsonConverterFactory.create());
+            Retrofit retrofit = builder.build();
 
-        ApiInterface client = retrofit.create(ApiInterface.class);
-        Call<RepaymentDoneResponse> call = client.makeRepayment(loanId, cashAmount, bankAmount, chequeNo);
+            ApiInterface client = retrofit.create(ApiInterface.class);
+            Call<RepaymentDoneResponse> call = client.makeRepayment(loanId, cashAmount, bankAmount, chequeNo);
 
-        call.enqueue(new Callback<RepaymentDoneResponse>() {
-            @Override
-            public void onResponse(Call<RepaymentDoneResponse> call, Response<RepaymentDoneResponse> response) {
-                if(response.code() == 200){
-                    Toast.makeText(getContext(), "Successfully entered the installment ", Toast.LENGTH_LONG).show();
-                    Repayment newRepayment = response.body().getRepayments();
-                    sqlLiteHelper.insertRepayments(newRepayment);
-                    mProgressDialog.dismiss();
+            call.enqueue(new Callback<RepaymentDoneResponse>() {
+                @Override
+                public void onResponse(Call<RepaymentDoneResponse> call, Response<RepaymentDoneResponse> response) {
+                    if (response.code() == 200) {
+                        Toast.makeText(getContext(), "Successfully entered the installment ", Toast.LENGTH_LONG).show();
+                        Repayment newRepayment = response.body().getRepayments();
+                        sqlLiteHelper.insertRepayments(newRepayment);
+                        updateView();
+                        mProgressDialog.dismiss();
 
-                    Fragment fragment = new EnterCustomerNumberFragment();
-                    FragmentManager fragmentManager =getFragmentManager();
-                    fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment).addToBackStack(null).commit();
-                }else{
-                    Toast.makeText(getContext(), "Failed to make installment", Toast.LENGTH_LONG).show();
+//                        Fragment fragment = new EnterCustomerNumberFragment();
+//                        FragmentManager fragmentManager =getFragmentManager();
+//                        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//                        fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment).addToBackStack(null).commit();
+                    } else {
+                        Toast.makeText(getContext(), "Failed to make installment", Toast.LENGTH_LONG).show();
+                        mBtnPay.setEnabled(true);
+                        mProgressDialog.dismiss();
+                        AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
+                        builder1.setMessage("Failed making installment. Do you want to re try?");
+                        builder1.setCancelable(true);
+
+                        builder1.setPositiveButton(
+                                "Yes",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                        makeRepaymentForFirstTime();
+                                    }
+                                });
+
+                        builder1.setNegativeButton(
+                                "No",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+
+                        AlertDialog alert11 = builder1.create();
+                        alert11.show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<RepaymentDoneResponse> call, Throwable t) {
+                    Toast.makeText(getContext(), "Exception " + t.getMessage(), Toast.LENGTH_LONG).show();
                     mBtnPay.setEnabled(true);
                     mProgressDialog.dismiss();
+
                     AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
                     builder1.setMessage("Failed making installment. Do you want to re try?");
                     builder1.setCancelable(true);
@@ -234,42 +354,13 @@ public class RepaymentFragment extends Fragment {
                     AlertDialog alert11 = builder1.create();
                     alert11.show();
                 }
-            }
-
-            @Override
-            public void onFailure(Call<RepaymentDoneResponse> call, Throwable t) {
-                Toast.makeText(getContext(), "Exception " + t.getMessage(), Toast.LENGTH_LONG).show();
-                mBtnPay.setEnabled(true);
-                mProgressDialog.dismiss();
-
-                AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
-                builder1.setMessage("Failed making installment. Do you want to re try?");
-                builder1.setCancelable(true);
-
-                builder1.setPositiveButton(
-                        "Yes",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                                makeRepaymentForFirstTime();
-                            }
-                        });
-
-                builder1.setNegativeButton(
-                        "No",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-
-                AlertDialog alert11 = builder1.create();
-                alert11.show();
-            }
-        });
+            });
+        } else {
+            mEtRepaymentAmount.setError("Please enter installment amount");
+        }
     }
 
-    public void editRepayment(){
+    public void editRepayment() {
         mProgressDialog = new ProgressDialog(getContext());
         mProgressDialog.setTitle("Processing...");
         mProgressDialog.setMessage("Editing installment");
@@ -287,36 +378,72 @@ public class RepaymentFragment extends Fragment {
             chequeNo = mEtChequeNo.getText().toString();
         }*/
 
-        cashAmount = Float.parseFloat(mEtRepaymentAmount.getText().toString());
-        bankAmount = 0;
-        chequeNo = "";
+        String stringCashAmount = mEtRepaymentAmount.getText().toString();
+        if (!stringCashAmount.equals("")) {
+            cashAmount = Float.parseFloat(stringCashAmount);
+            bankAmount = 0;
+            chequeNo = "";
 
-        Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("http://www.southernpropertydevelopers.com/")
-                .addConverterFactory(GsonConverterFactory.create());
-        Retrofit retrofit = builder.build();
+            Retrofit.Builder builder = new Retrofit.Builder()
+                    .baseUrl("http://www.southernpropertydevelopers.com/")
+                    .addConverterFactory(GsonConverterFactory.create());
+            Retrofit retrofit = builder.build();
 
-        ApiInterface client = retrofit.create(ApiInterface.class);
-        Call<RepaymentDoneResponse> call = client.editRepayment(repaymentId, cashAmount,currentDateString, bankAmount, chequeNo);
+            ApiInterface client = retrofit.create(ApiInterface.class);
+            Call<RepaymentDoneResponse> call = client.editRepayment(repaymentId, cashAmount, currentDateString, bankAmount, chequeNo);
 
-        call.enqueue(new Callback<RepaymentDoneResponse>() {
-            @Override
-            public void onResponse(Call<RepaymentDoneResponse> call, Response<RepaymentDoneResponse> response) {
-                if(response.code() == 200){
-                    Toast.makeText(getContext(), "Successfully edited the installment ", Toast.LENGTH_LONG).show();
-                    Repayment newRepayment = response.body().getRepayments();
-                    sqlLiteHelper.deleteReapymentById(repaymentId);
-                    sqlLiteHelper.insertRepayments(newRepayment);
-                    mProgressDialog.dismiss();
+            call.enqueue(new Callback<RepaymentDoneResponse>() {
+                @Override
+                public void onResponse(Call<RepaymentDoneResponse> call, Response<RepaymentDoneResponse> response) {
+                    if (response.code() == 200) {
+                        Toast.makeText(getContext(), "Successfully edited the installment ", Toast.LENGTH_LONG).show();
+                        Repayment newRepayment = response.body().getRepayments();
+                        sqlLiteHelper.deleteReapymentById(repaymentId);
+                        sqlLiteHelper.insertRepayments(newRepayment);
+                        iseditEnabled = false;
+                        updateView();
+                        mProgressDialog.dismiss();
 
-                    Fragment fragment = new EnterCustomerNumberFragment();
-                    FragmentManager fragmentManager =getFragmentManager();
-                    fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment).addToBackStack(null).commit();
-                }else{
-                    Toast.makeText(getContext(), "Failed to edit installment " + response.code(), Toast.LENGTH_LONG).show();
+//                        Fragment fragment = new EnterCustomerNumberFragment();
+//                        FragmentManager fragmentManager =getFragmentManager();
+//                        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//                        fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment).addToBackStack(null).commit();
+                    } else {
+                        Toast.makeText(getContext(), "Failed to edit installment " + response.code(), Toast.LENGTH_LONG).show();
+                        mBtnPay.setEnabled(true);
+                        mProgressDialog.dismiss();
+                        AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
+                        builder1.setMessage("Failed editing installment. Do you want to re try?");
+                        builder1.setCancelable(true);
+
+                        builder1.setPositiveButton(
+                                "Yes",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                        editRepayment();
+                                    }
+                                });
+
+                        builder1.setNegativeButton(
+                                "No",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+
+                        AlertDialog alert11 = builder1.create();
+                        alert11.show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<RepaymentDoneResponse> call, Throwable t) {
+                    Toast.makeText(getContext(), "Exception " + t.getMessage(), Toast.LENGTH_LONG).show();
                     mBtnPay.setEnabled(true);
                     mProgressDialog.dismiss();
+
                     AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
                     builder1.setMessage("Failed editing installment. Do you want to re try?");
                     builder1.setCancelable(true);
@@ -341,38 +468,10 @@ public class RepaymentFragment extends Fragment {
                     AlertDialog alert11 = builder1.create();
                     alert11.show();
                 }
-            }
-
-            @Override
-            public void onFailure(Call<RepaymentDoneResponse> call, Throwable t) {
-                Toast.makeText(getContext(), "Exception " + t.getMessage(), Toast.LENGTH_LONG).show();
-                mBtnPay.setEnabled(true);
-                mProgressDialog.dismiss();
-
-                AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
-                builder1.setMessage("Failed editing installment. Do you want to re try?");
-                builder1.setCancelable(true);
-
-                builder1.setPositiveButton(
-                        "Yes",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                                editRepayment();
-                            }
-                        });
-
-                builder1.setNegativeButton(
-                        "No",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-
-                AlertDialog alert11 = builder1.create();
-                alert11.show();
-            }
-        });
+            });
+        } else {
+            mEtRepaymentAmount.setError("Please enter installment amount");
+        }
     }
+
 }

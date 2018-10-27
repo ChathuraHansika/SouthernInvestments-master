@@ -132,16 +132,38 @@
             android:inputType="numberDecimal"/>
     </android.support.design.widget.TextInputLayout>
 
-    <Button
-        android:id="@+id/btn_pay_amount"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/btnshape"
-        android:text="Pay" />
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/btn_pay_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/btnshape"
+            android:text="Pay"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/btn_print"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/btnshape"
+            android:text="print"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
 
     <!--<Switch
         android:id="@+id/switch_cheque"
@@ -167,5 +189,6 @@
             android:hint="Cheque Number..." />
     </android.support.design.widget.TextInputLayout>
 -->
+
 
 </LinearLayout>

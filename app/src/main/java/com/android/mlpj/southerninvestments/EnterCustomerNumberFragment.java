@@ -42,7 +42,7 @@ public class EnterCustomerNumberFragment extends Fragment {
                     Cursor res = sqlLiteHelper.getCustomerByNo(customerNo);
                     if(res.isAfterLast() == false){
                         String status = res.getString(6);
-                        Toast.makeText(getContext(), status, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getContext(), status, Toast.LENGTH_SHORT).show();
                         if(status.equals("ongoing")){
                             Bundle bundle = new Bundle();
                             bundle.putInt("CUSTOMER_NO", customerNo);
