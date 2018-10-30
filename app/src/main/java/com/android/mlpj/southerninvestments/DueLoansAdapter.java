@@ -33,6 +33,7 @@ public class DueLoansAdapter extends RecyclerView.Adapter<DueLoansAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.Name.setText(mDueLoans.get(position).getName());
         holder.NIC.setText(mDueLoans.get(position).getNIC());
+        //String amount = String.format("%,d", Integer.parseInt(mDueLoans.get(position).getRemaining_amount()));
         holder.Remaining_Amount.setText(mDueLoans.get(position).getRemaining_amount());
         holder.Total_Amount.setText(mDueLoans.get(position).getAmount());
         holder.Remaining_date.setText(mDueLoans.get(position).getInstallment_count());
