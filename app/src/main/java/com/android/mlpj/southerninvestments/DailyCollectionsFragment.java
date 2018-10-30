@@ -56,7 +56,7 @@ public DailyCollectionsFragment(){
         FragmentManager fragmentManager = getFragmentManager();
         mDailyCollectionAdapter = new DailyCollectionAdapter(mDailyCollectionDetails, getActivity(), fragmentManager);
         mRecyclerView.setAdapter(mDailyCollectionAdapter);
-       DailyCollectionDetails dailyCollectionDetails = new DailyCollectionDetails();
+        DailyCollectionDetails dailyCollectionDetails = new DailyCollectionDetails();
 
       mTotalAmount.setText(Total);
 

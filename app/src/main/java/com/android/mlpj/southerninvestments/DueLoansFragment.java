@@ -7,10 +7,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -21,7 +26,7 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DueLoansFragment extends Fragment  {
+public class DueLoansFragment extends Fragment  implements SearchView.OnQueryTextListener ,MenuItem.OnActionExpandListener  {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -63,5 +68,66 @@ public class DueLoansFragment extends Fragment  {
 
         return view;
     }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.toolbar_menu, menu);
+        final   MenuItem searchItem = menu.findItem(R.id.action_search);
+        final   SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setOnQueryTextListener(this);
+        searchView.setQueryHint("Search");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if(!searchView.isIconified()){
+                    searchView.setIconified(true);
+                }
+                searchItem.collapseActionView();
+                return false;
+            }
 
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                final List<DueLoansDetails> filtermodelList = filter(mDueLoansDetails,newText);
+                mDueLoansAdapter.upDateList(filtermodelList);
+                return true;
+            }
+        });
+        super.onCreateOptionsMenu(menu, inflater);
+
+
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
+    }
+
+    @Override
+    public boolean onMenuItemActionExpand(MenuItem item) {
+        return false;
+    }
+
+    @Override
+    public boolean onMenuItemActionCollapse(MenuItem item) {
+        return false;
+    }
+    private List<DueLoansDetails> filter(List<DueLoansDetails> cls, String input){
+        input = input.toLowerCase();
+        final List<DueLoansDetails> filtredModel = new ArrayList<>();
+        for(DueLoansDetails model : cls){
+            final String name = model.getNIC().toLowerCase();
+            final String customerNumber = model.getName().toLowerCase();
+            if(name.startsWith(input)){
+                filtredModel.add(model);
+            }else if(customerNumber.startsWith(input)){
+                filtredModel.add(model);
+            }
+        }
+        return filtredModel;
+    }
 }

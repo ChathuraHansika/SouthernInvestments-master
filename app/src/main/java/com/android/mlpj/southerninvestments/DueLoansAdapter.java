@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DueLoansAdapter extends RecyclerView.Adapter<DueLoansAdapter.ViewHolder> {
@@ -76,10 +77,10 @@ public class DueLoansAdapter extends RecyclerView.Adapter<DueLoansAdapter.ViewHo
         }
         }
 
-//    public void upDateList(List<CustomerDetails> list){
-//        mDueLoans = new ArrayList<>();
-//        mDueLoans.addAll(list);
-//        notifyDataSetChanged();
-//    }
+    public void upDateList(List<DueLoansDetails> list){
+        mDueLoans = new ArrayList<>();
+        mDueLoans.addAll(list);
+        notifyDataSetChanged();
+    }
     }
 
