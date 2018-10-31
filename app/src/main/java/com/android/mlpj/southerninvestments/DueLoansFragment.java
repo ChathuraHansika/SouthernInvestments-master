@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -117,17 +118,18 @@ public class DueLoansFragment extends Fragment  implements SearchView.OnQueryTex
         return false;
     }
     private List<DueLoansDetails> filter(List<DueLoansDetails> cls, String input){
+
         input = input.toLowerCase();
         final List<DueLoansDetails> filtredModel = new ArrayList<>();
         for(DueLoansDetails model : cls){
             final String NIC = model.getNIC().toLowerCase();
             final String Name = model.getName().toLowerCase();
             final String CNum = model.getId().toLowerCase();
-            if(NIC.startsWith(input)){
+            if(NIC.contains(input)){
                 filtredModel.add(model);
-            }else if(Name.startsWith(input)){
+            }else if(Name.contains(input)){
                 filtredModel.add(model);
-            }else if(CNum.startsWith(input)){
+            }else if(CNum.contains(input)){
                 filtredModel.add(model);
             }
         }
