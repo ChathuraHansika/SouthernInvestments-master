@@ -74,7 +74,7 @@ public class DueLoansFragment extends Fragment  implements SearchView.OnQueryTex
         final   MenuItem searchItem = menu.findItem(R.id.action_search);
         final   SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setOnQueryTextListener(this);
-        searchView.setQueryHint("Search");
+        searchView.setQueryHint("Search...");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -120,11 +120,14 @@ public class DueLoansFragment extends Fragment  implements SearchView.OnQueryTex
         input = input.toLowerCase();
         final List<DueLoansDetails> filtredModel = new ArrayList<>();
         for(DueLoansDetails model : cls){
-            final String name = model.getNIC().toLowerCase();
-            final String customerNumber = model.getName().toLowerCase();
-            if(name.startsWith(input)){
+            final String NIC = model.getNIC().toLowerCase();
+            final String Name = model.getName().toLowerCase();
+            final String CNum = model.getId().toLowerCase();
+            if(NIC.startsWith(input)){
                 filtredModel.add(model);
-            }else if(customerNumber.startsWith(input)){
+            }else if(Name.startsWith(input)){
+                filtredModel.add(model);
+            }else if(CNum.startsWith(input)){
                 filtredModel.add(model);
             }
         }

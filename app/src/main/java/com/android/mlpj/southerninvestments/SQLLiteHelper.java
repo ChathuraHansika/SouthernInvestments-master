@@ -195,7 +195,7 @@ public class SQLLiteHelper extends SQLiteOpenHelper{
 
     public List<DueLoansDetails> getDueLoans(){
         SQLiteDatabase d_Loans = this.getReadableDatabase();
-        Cursor get_D_Loans = d_Loans.rawQuery("select name,NIC,loan_amount,no_of_installments,CustomerLoan.id" +
+        Cursor get_D_Loans = d_Loans.rawQuery("select name,NIC,loan_amount,no_of_installments,CustomerLoan.id,Customer.customer_no" +
                 " from Customer,CustomerLoan where Customer.id = CustomerLoan.customer_id and status = 'ongoing' ",null);
 
         get_D_Loans.moveToFirst();
@@ -208,7 +208,7 @@ public class SQLLiteHelper extends SQLiteOpenHelper{
                             " from LoanRepayment where LoanRepayment.loan_id = "+ get_D_Loans.getInt(4),null);
                             get_Repayments.moveToLast();
 
-                    DueLoansDetails newDueLoans = new DueLoansDetails(get_D_Loans.getString(0),get_D_Loans.getString(1),get_Repayments.getString(1),get_D_Loans.getString(2),get_Repayments.getString(0),get_D_Loans.getString(3));
+                    DueLoansDetails newDueLoans = new DueLoansDetails(get_D_Loans.getString(5),get_D_Loans.getString(0),get_D_Loans.getString(1),get_Repayments.getFloat(1),get_D_Loans.getFloat(2),get_Repayments.getString(0),get_D_Loans.getString(3));
                     dueLoansDetailsList.add(newDueLoans);
                     get_D_Loans.moveToNext();
                 }

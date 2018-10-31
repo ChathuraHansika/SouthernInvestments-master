@@ -3,14 +3,18 @@ package com.android.mlpj.southerninvestments;
 
 
 public class DueLoansDetails {
+    private String Id;
     private String name;
     private String NIC;
-    private String remaining_amount;
-    private String amount;
+    private Float remaining_amount;
+    private Float amount;
     private String installment_count;
     private String no_of_installments;
 
-    public DueLoansDetails(String name, String NIC, String remaining_amount, String amount, String installment_count, String no_of_installments) {
+
+
+    public DueLoansDetails(String Id, String name, String NIC, Float remaining_amount, Float amount, String installment_count, String no_of_installments) {
+        this.Id = Id;
         this.name = name;
         this.NIC = NIC;
         this.remaining_amount = remaining_amount;
@@ -18,7 +22,13 @@ public class DueLoansDetails {
         this.installment_count = installment_count;
         this.no_of_installments = no_of_installments;
     }
+    public String getId() {
+        return Id;
+    }
 
+    public void setId(String id) {
+        Id = id;
+    }
     public String getName() {
         return name;
     }
@@ -35,19 +45,19 @@ public class DueLoansDetails {
         this.NIC = NIC;
     }
 
-    public String getRemaining_amount() {
+    public Float getRemaining_amount() {
         return remaining_amount;
     }
 
-    public void setRemaining_amount(String remaining_amount) {
+    public void setRemaining_amount(Float remaining_amount) {
         this.remaining_amount = remaining_amount;
     }
 
-    public String getAmount() {
+    public Float getAmount() {
         return amount;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(Float amount) {
         this.amount = amount;
     }
 
