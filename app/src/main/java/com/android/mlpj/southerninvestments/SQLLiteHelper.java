@@ -217,7 +217,7 @@ public class SQLLiteHelper extends SQLiteOpenHelper{
     public List<DailyCollectionDetails> getDailyCollection(){
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select customer_no,name,amount from Customer,CustomerLoan,LoanRepayment where Customer.id = CustomerLoan.customer_id and CustomerLoan.id = loan_id and LoanRepayment.created_at = date('now', 'localtime')",null);
+        Cursor res = db.rawQuery("select customer_no,name,amount from Customer,CustomerLoan,LoanRepayment where Customer.id = CustomerLoan.customer_id and CustomerLoan.id = loan_id and LoanRepayment.created_at = date('now', 'localtime') and amount>0",null);
         res.moveToFirst();
 
         List<DailyCollectionDetails> dailyCollection_list = new ArrayList<DailyCollectionDetails>();
