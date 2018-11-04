@@ -32,6 +32,12 @@ public interface ApiInterface {
                                               @Field("bank_amount") float bank_amount,
                                               @Field("cheque_no") String cheque_no);
 
+//    @POST("api/...............")
+//    @FormUrlEncoded
+//    Call<PocketMoneyResponse> addPocketMoney(@Field("sales_rep_id") int sales_rep_id,
+//                                           @Field("amount") float amount,
+//                                           @Field("description") String description );
+
     @GET("Hotel")
     Call<List<CustomerDetails>> getDetails();
 

@@ -30,7 +30,18 @@ public class DueLoansDetails {
         Id = id;
     }
     public String getName() {
-        return name;
+        int count =0;
+        String Name = name;
+        String[] split_words=Name.split("\\s");
+        String final_name ="";
+        for(String w:split_words){
+            System.out.println(w);
+            count += w.length();
+            if(count < 30){
+                final_name += w + " ";
+            }
+        }
+        return final_name;
     }
 
     public void setName(String name) {
