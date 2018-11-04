@@ -179,7 +179,7 @@ public class SQLLiteHelper extends SQLiteOpenHelper{
 
     public Cursor getRepaymentByCustomerId(int customerId){
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery( "select remaining_amount, installment_count, CustomerLoan.id, no_of_installments,LoanRepayment.created_at, LoanRepayment.amount, LoanRepayment.id from Customer, CustomerLoan, LoanRepayment where Customer.id = "
+        Cursor res =  db.rawQuery( "select remaining_amount, installment_count, CustomerLoan.id, no_of_installments,LoanRepayment.created_at, LoanRepayment.amount, LoanRepayment.id, loan_amount, start_date, end_date, installment_amount from Customer, CustomerLoan, LoanRepayment where Customer.id = "
                 + customerId + " And Customer.id = Customerloan.customer_id AND LoanRepayment.loan_id = CustomerLoan.id order by LoanRepayment.id desc", null );
         res.moveToFirst();
         return res;

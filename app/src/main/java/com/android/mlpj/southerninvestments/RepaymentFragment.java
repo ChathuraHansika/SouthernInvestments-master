@@ -42,13 +42,13 @@ public class RepaymentFragment extends Fragment {
     private ProgressDialog mProgressDialog;
 
     private boolean isCheque, isRepaymentDone, iseditEnabled;
-    private int loanId, totalNoOfInstallments, repaymentId;
+    private int loanId, totalNoOfInstallments, repaymentId, mInstallmentCount;
     private String currentDateString;
     private SQLLiteHelper sqlLiteHelper;
     private BluetoothSocket mBluetoothSocket;
 
-    private String customerName;
-    float paidAmount, remainingAmount;
+    private String mCustomerName, mCustomerNo, mLoanStartDate, mLoanEndDate;
+    private float paidAmount, remainingAmount, mLoanAmount, mInstallmentAmount;
     private UserLocalStore userLocalStore;
 
     @Override
@@ -124,14 +124,28 @@ public class RepaymentFragment extends Fragment {
                                 String bill = "Southern Investments\n";
                                 os.write(bill.getBytes());
                                 os.write(cc);
+                                String address = "0773906738\n";
+                                os.write(address.getBytes());
                                 os.write(PRINT_ALIGN_LEFT);
-                                String separator = "------------------------------\n";
+                                String separator = "-------------------------------\n";
                                 os.write(separator.getBytes());
-                                String name = "CUstomer : " + customerName + "\n";
+                                String customerNo = "Customer No : " + mCustomerNo + "\n";
+                                os.write(customerNo.getBytes());
+                                String name = "Customer : " + mCustomerName + "\n";
                                 os.write(name.getBytes());  //todo: if name is lengthy
-                                String paid = String.format("Installment Paid : Rs.%.2f\n", paidAmount);
+                                String loanAmount = String.format("Loan amt : Rs.%,.2f\n", mLoanAmount);
+                                os.write(loanAmount.getBytes());
+                                String loanStartDate = String.format("Loan started at : " + mLoanStartDate + "\n");
+                                os.write(loanStartDate.getBytes());
+                                String loanEndDate = String.format("Loan end date : " + mLoanEndDate + "\n");
+                                os.write(loanEndDate.getBytes());
+                                String installmentCount = "Installment count : " + mInstallmentCount + "\n";
+                                os.write(installmentCount.getBytes());
+                                String installmentAmount = String.format("Installment amt : Rs.%,.2f\n", mInstallmentAmount);
+                                os.write(installmentAmount.getBytes());
+                                String paid = String.format("Installment paid : Rs.%,.2f\n", paidAmount);
                                 os.write(paid.getBytes());
-                                String remaining = String.format("Remaining Amount : Rs.%.2f\n", remainingAmount);
+                                String remaining = String.format("Due amt : Rs.%,.2f\n", remainingAmount);
                                 os.write(remaining.getBytes());
                                 os.write(separator.getBytes());
                                 String salesRepName = "Salesman name : " + userLocalStore.getUserDetails().getName() + "\n";
@@ -165,6 +179,7 @@ public class RepaymentFragment extends Fragment {
         sqlLiteHelper = new SQLLiteHelper(getContext());
 
         int customerNo = getArguments().getInt("CUSTOMER_NO");
+        mCustomerNo = Integer.toString(customerNo);
         //Toast.makeText(getContext(), "" + customerNo, Toast.LENGTH_LONG).show();
 
         //get current date in required format
@@ -177,8 +192,8 @@ public class RepaymentFragment extends Fragment {
 
         Cursor res = sqlLiteHelper.getCustomerByNo(customerNo);
         mTvCustomerNo.setText(res.getString(1));
-        customerName = res.getString(2);
-        mTvName.setText(customerName);
+        mCustomerName = res.getString(2);
+        mTvName.setText(mCustomerName);
         mTvNic.setText(res.getString(4));
 
         int customerId = res.getInt(0);
@@ -191,11 +206,15 @@ public class RepaymentFragment extends Fragment {
         String repaymentDate = resRepayment.getString(4);
         paidAmount = resRepayment.getFloat(5);
         repaymentId = resRepayment.getInt(6);
-
+        mLoanAmount = resRepayment.getFloat(7);
+        mLoanStartDate = resRepayment.getString(8);
+        mLoanEndDate = resRepayment.getString(9);
+        mInstallmentAmount = resRepayment.getFloat(10);
         //Toast.makeText(getContext(), "" + remainingAmount + " " + installmentCount + " " + loanId , Toast.LENGTH_LONG).show();
 
         mTvRemainingAmount.setText(Float.toString(remainingAmount));
-        mTvInstallmentNo.setText(Integer.toString(totalNoOfInstallments - installmentCount));
+        mInstallmentCount = totalNoOfInstallments - installmentCount;
+        mTvInstallmentNo.setText(Integer.toString(mInstallmentCount));
 
         //check whether edit or new payment
         isRepaymentDone = repaymentDate.equals(currentDateString);

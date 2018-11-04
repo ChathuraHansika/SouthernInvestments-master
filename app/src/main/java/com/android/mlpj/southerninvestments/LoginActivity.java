@@ -153,6 +153,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<LoginResultPOJO> call, Throwable t) {
+                    Log.d(TAG, "onFailure: " + t.getMessage());
                     Toast.makeText(LoginActivity.this, "Connection Failure " + t.getMessage(), Toast.LENGTH_LONG).show();
                     mProgressDialog.dismiss();
                     _loginButton.setEnabled(true);

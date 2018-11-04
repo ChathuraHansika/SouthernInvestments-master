@@ -106,7 +106,8 @@ public class LoanDetails {
     }
 
     public String getStartDate() {
-        return startDate;
+        String[] parts = startDate.split(" ");
+        return parts[0];
     }
 
     public void setStartDate(String startDate) {
@@ -114,7 +115,8 @@ public class LoanDetails {
     }
 
     public String getEndDate() {
-        return endDate;
+        String[] parts = endDate.split(" ");
+        return parts[0];
     }
 
     public void setEndDate(String endDate) {
