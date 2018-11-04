@@ -8,6 +8,7 @@ import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 
 /**
@@ -74,9 +75,10 @@ public class DashboardFragment extends Fragment {
         mLoanIssue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment fragment = new LoanIssueNicSearchFragment();
-                FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment).commit();
+//                Fragment fragment = new LoanIssueNicSearchFragment();
+//                FragmentManager fragmentManager = getFragmentManager();
+//                fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment).commit();
+                Toast.makeText(getContext(), "Still we are working on this", Toast.LENGTH_LONG).show();
             }
         });
         mLoanRePayment.setOnClickListener(new View.OnClickListener() {

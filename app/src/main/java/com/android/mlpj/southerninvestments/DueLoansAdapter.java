@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DueLoansAdapter extends RecyclerView.Adapter<DueLoansAdapter.ViewHolder> {
@@ -33,8 +34,13 @@ public class DueLoansAdapter extends RecyclerView.Adapter<DueLoansAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.Name.setText(mDueLoans.get(position).getName());
         holder.NIC.setText(mDueLoans.get(position).getNIC());
-        holder.Remaining_Amount.setText(mDueLoans.get(position).getRemaining_amount());
-        holder.Total_Amount.setText(mDueLoans.get(position).getAmount());
+        String Remaining_amount = String.format("%,.2f", mDueLoans.get(position).getRemaining_amount());
+        String Total_amount = String.format("%,.2f",mDueLoans.get(position).getAmount());
+        holder.Cus_Number.setText(mDueLoans.get(position).getId());
+//        holder.Remaining_Amount.setText(mDueLoans.get(position).getRemaining_amount().toString());
+//        holder.Total_Amount.setText(mDueLoans.get(position).getAmount().toString());
+        holder.Remaining_Amount.setText(Remaining_amount);
+        holder.Total_Amount.setText(Total_amount);
         holder.Remaining_date.setText(mDueLoans.get(position).getInstallment_count());
         holder.Total_date.setText(mDueLoans.get(position).getNo_of_installments());
         holder.Card.setOnClickListener(new View.OnClickListener() {
@@ -60,6 +66,7 @@ public class DueLoansAdapter extends RecyclerView.Adapter<DueLoansAdapter.ViewHo
         public   TextView Total_Amount;
         public   TextView Remaining_date;
         public   TextView Total_date;
+        public   TextView Cus_Number;
         public   CardView Card;
 
         public ViewHolder(View itemView) {
@@ -71,14 +78,15 @@ public class DueLoansAdapter extends RecyclerView.Adapter<DueLoansAdapter.ViewHo
             Total_Amount         = itemView.findViewById(R.id.tv_total_amount);
             Remaining_date       = itemView.findViewById(R.id.tv_paid_installments);
             Total_date           = itemView.findViewById(R.id.tv_total_installments);
+            Cus_Number           = itemView.findViewById(R.id.customerNum);
             Card                 = itemView.findViewById(R.id.D_card);
         }
         }
 
-//    public void upDateList(List<CustomerDetails> list){
-//        mDueLoans = new ArrayList<>();
-//        mDueLoans.addAll(list);
-//        notifyDataSetChanged();
-//    }
+    public void upDateList(List<DueLoansDetails> list){
+        mDueLoans = new ArrayList<>();
+        mDueLoans.addAll(list);
+        notifyDataSetChanged();
+    }
     }
 

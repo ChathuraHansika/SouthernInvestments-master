@@ -195,7 +195,7 @@ public class SQLLiteHelper extends SQLiteOpenHelper{
 
     public List<DueLoansDetails> getDueLoans(){
         SQLiteDatabase d_Loans = this.getReadableDatabase();
-        Cursor get_D_Loans = d_Loans.rawQuery("select name,NIC,loan_amount,no_of_installments,CustomerLoan.id" +
+        Cursor get_D_Loans = d_Loans.rawQuery("select name,NIC,loan_amount,no_of_installments,CustomerLoan.id,Customer.customer_no" +
                 " from Customer,CustomerLoan where Customer.id = CustomerLoan.customer_id and status = 'ongoing' ",null);
 
         get_D_Loans.moveToFirst();
@@ -208,7 +208,7 @@ public class SQLLiteHelper extends SQLiteOpenHelper{
                             " from LoanRepayment where LoanRepayment.loan_id = "+ get_D_Loans.getInt(4),null);
                             get_Repayments.moveToLast();
 
-                    DueLoansDetails newDueLoans = new DueLoansDetails(get_D_Loans.getString(0),get_D_Loans.getString(1),get_Repayments.getString(1),get_D_Loans.getString(2),get_Repayments.getString(0),get_D_Loans.getString(3));
+                    DueLoansDetails newDueLoans = new DueLoansDetails(get_D_Loans.getString(5),get_D_Loans.getString(0),get_D_Loans.getString(1),get_Repayments.getFloat(1),get_D_Loans.getFloat(2),get_Repayments.getString(0),get_D_Loans.getString(3));
                     dueLoansDetailsList.add(newDueLoans);
                     get_D_Loans.moveToNext();
                 }
@@ -217,14 +217,14 @@ public class SQLLiteHelper extends SQLiteOpenHelper{
     public List<DailyCollectionDetails> getDailyCollection(){
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select customer_no,name,amount from Customer,CustomerLoan,LoanRepayment where Customer.id = CustomerLoan.customer_id and CustomerLoan.id = loan_id and LoanRepayment.created_at = date('now', 'localtime')",null);
+        Cursor res = db.rawQuery("select customer_no,name,amount from Customer,CustomerLoan,LoanRepayment where Customer.id = CustomerLoan.customer_id and CustomerLoan.id = loan_id and LoanRepayment.created_at = date('now', 'localtime') and amount>0",null);
         res.moveToFirst();
 
         List<DailyCollectionDetails> dailyCollection_list = new ArrayList<DailyCollectionDetails>();
 
         while(res.isAfterLast() == false){
 
-            totalAmount = totalAmount + Integer.parseInt(res.getString(2));
+           // totalAmount = totalAmount + Integer.parseInt(res.getString(2));
             DailyCollectionDetails newCollection = new DailyCollectionDetails(res.getString(0),res.getString(1),res.getString(2),totalAmount);
             dailyCollection_list.add(newCollection);
             res.moveToNext();
@@ -232,6 +232,26 @@ public class SQLLiteHelper extends SQLiteOpenHelper{
 
 //        Toast.makeText(context, totalAmount , Toast.LENGTH_SHORT).show();
         return dailyCollection_list;
+    }
+    public int getDailyCollectionTotal(){
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select customer_no,name,amount from Customer,CustomerLoan,LoanRepayment where Customer.id = CustomerLoan.customer_id and CustomerLoan.id = loan_id and LoanRepayment.created_at = date('now', 'localtime')",null);
+        res.moveToFirst();
+       // totalAmount +=  Integer.parseInt(res.getString(2));
+
+        List<DailyCollectionDetails> dailyCollection_list = new ArrayList<DailyCollectionDetails>();
+
+        while(res.isAfterLast() == false){
+
+           totalAmount = totalAmount + Integer.parseInt(res.getString(2));
+            DailyCollectionDetails newCollection = new DailyCollectionDetails(res.getString(0),res.getString(1),res.getString(2),totalAmount);
+            dailyCollection_list.add(newCollection);
+            res.moveToNext();
+        }
+
+//        Toast.makeText(context, totalAmount , Toast.LENGTH_SHORT).show();
+        return totalAmount;
     }
 }
 //LoanRepayment.created_at

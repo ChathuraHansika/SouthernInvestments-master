@@ -131,9 +131,9 @@ public class CustomerListFragment extends Fragment implements SearchView.OnQuery
         for(CustomerDetails model : cls){
             final String name = model.getName().toLowerCase();
             final String customerNumber = model.getCustomerNo().toLowerCase();
-            if(name.startsWith(input)){
+            if(name.contains(input)){
                 filtredModel.add(model);
-            }else if(customerNumber.startsWith(input)){
+            }else if(customerNumber.contains(input)){
                 filtredModel.add(model);
             }
         }

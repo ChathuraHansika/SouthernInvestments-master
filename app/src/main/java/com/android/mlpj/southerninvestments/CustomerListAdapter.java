@@ -27,7 +27,7 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
     private List<CustomerDetails> mCustomersDetails;
     private Context mContext;
     private FragmentManager fragmentManager;
-    private String phoneNum;
+    //private String phoneNum;
 
     public CustomerListAdapter(List<CustomerDetails> customerDetails, Context context, FragmentManager fragmentManager) {
         this.mCustomersDetails = customerDetails;
@@ -43,12 +43,23 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
 
 
     }
+    private void dialContactPhone(final String phoneNumber) {
+        mContext.startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null)));
+    }
 
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         //set status(active...)
-        phoneNum =  mCustomersDetails.get(position).getPhoneNo().toString();
+       final String phoneNum =  mCustomersDetails.get(position).getPhoneNo().toString();
+
+       holder.call.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               Toast.makeText(mContext, phoneNum, Toast.LENGTH_SHORT).show();
+               dialContactPhone(phoneNum);
+           }
+       });
 
         String status = mCustomersDetails.get(position).getStatus().toUpperCase();
         holder.mName.setText(mCustomersDetails.get(position).getName());
@@ -85,25 +96,25 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
         });
 */
 
-        holder.call.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(mContext, phoneNum, Toast.LENGTH_SHORT).show();
-                Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:" +phoneNum ));
-                if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
-                }
-                mContext.startActivity(callIntent);
-            }
-        });
+//        holder.call.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(mContext, phoneNum, Toast.LENGTH_SHORT).show();
+//                Intent callIntent = new Intent(Intent.ACTION_CALL);
+//                callIntent.setData(Uri.parse("tel:" +phoneNum ));
+//                if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+//                    // TODO: Consider calling
+//                    //    ActivityCompat#requestPermissions
+//                    // here to request the missing permissions, and then overriding
+//                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//                    //                                          int[] grantResults)
+//                    // to handle the case where the user grants the permission. See the documentation
+//                    // for ActivityCompat#requestPermissions for more details.
+//                    return;
+//                }
+//                mContext.startActivity(callIntent);
+//            }
+//        });
     }
 
 

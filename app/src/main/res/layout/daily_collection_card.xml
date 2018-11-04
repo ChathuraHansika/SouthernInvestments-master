@@ -40,7 +40,7 @@
                 android:id="@+id/dailySummary_name"
                 style="@style/Base.AlertDialog.AppCompat"
                 android:layout_width="160dp"
-                android:layout_height="28dp"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginStart="44dp"
                 android:layout_marginTop="8dp"
