@@ -10,68 +10,65 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:weightSum="6">
 
-        <android.support.constraint.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:weightSum="5"
+            android:layout_weight="0"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/textView2"
+                android:layout_weight="1"
                 style="@style/Base.AlertDialog.AppCompat"
                 android:layout_width="55dp"
-                android:layout_height="22dp"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:layout_marginEnd="24dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:text="ID"
                 android:textSize="18dp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/textView3"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textView3"
                 style="@style/Base.AlertDialog.AppCompat"
+                android:layout_weight="2"
                 android:layout_width="112dp"
-                android:layout_height="24dp"
+                android:layout_height="wrap_content"
+                android:text="Name"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="44dp"
+                android:layout_marginTop="8dp"
+                android:textStyle="bold"
+                android:textSize="18dp"
+                />
+
+            <TextView
+                android:id="@+id/textView31"
+                style="@style/Base.AlertDialog.AppCompat"
+                android:layout_weight="2"
+                android:layout_width="112dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="Name"
-                android:textStyle="bold"
-                android:textSize="18dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/textView4"
-                app:layout_constraintStart_toEndOf="@+id/textView2"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/textView4"
-                style="@style/Base.AlertDialog.AppCompat"
-                android:layout_width="90dp"
-                android:layout_height="27dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="8dp"
+                android:layout_height="wrap_content"
                 android:text="Amount"
-                android:textSize="18dp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/textView3"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textSize="18dp"
+                />
 
-        </android.support.constraint.ConstraintLayout>
+        </LinearLayout>
 
-        <android.support.constraint.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="4">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycle_customer_list"
@@ -79,65 +76,47 @@
                 android:layout_height="420dp"
                 android:layout_marginTop="8dp"
                 android:clipToPadding="false"
-                android:scrollbars="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:scrollbars="vertical">
 
             </android.support.v7.widget.RecyclerView>
 
-            <LinearLayout
-                android:layout_width="match_parent"
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_weight="2"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="#99b3ff"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/textView9"
+                style="@style/Base.AlertDialog.AppCompat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="74dp"
+                android:layout_marginStart="60dp"
+                android:text="TOTAL"
+                android:textSize="21dp" />
+
+            <TextView
+                android:id="@+id/dailySummary_total"
+                style="@style/Base.AlertDialog.AppCompat"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:background="#99b3ff"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/recycle_customer_list">
+                android:text="500000"
+                android:textAlignment="center"
+                android:textSize="25dp" />
 
-
-                <TextView
-                    android:id="@+id/textView9"
-                    style="@style/Base.AlertDialog.AppCompat"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginEnd="74dp"
-                    android:layout_marginStart="60dp"
-                    android:text="TOTAL"
-                    android:textSize="21dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/dailySummary_total"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/recycle_customer_list"
-                    app:layout_constraintVertical_bias="0.916" />
-
-                <TextView
-                    android:id="@+id/dailySummary_total"
-                    style="@style/Base.AlertDialog.AppCompat"
-                    android:layout_width="120dp"
-                    android:layout_height="32dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:text="500000"
-                    android:textAlignment="center"
-                    android:textSize="25dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.561"
-                    app:layout_constraintStart_toEndOf="@+id/textView9"
-                    app:layout_constraintTop_toBottomOf="@+id/recycle_customer_list"
-                    app:layout_constraintVertical_bias="1.0" />
-
-            </LinearLayout>
-        </android.support.constraint.ConstraintLayout>
+        </LinearLayout>
 
 
     </LinearLayout>
