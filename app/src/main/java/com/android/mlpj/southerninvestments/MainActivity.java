@@ -153,7 +153,12 @@ public class MainActivity extends AppCompatActivity
 //            FragmentManager fragmentManager = getSupportFragmentManager();
 //            fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment).commit();
 //
-        } else if (id == R.id.nav_logout) {
+        }else if(id == R.id.nav_pocket_money) {
+            Toast.makeText(this, "PocketMoney", Toast.LENGTH_SHORT).show();
+
+//            pocket money
+
+        }else if (id == R.id.nav_logout) {
             mUserLocalStore.clearUser();
             mUserLocalStore.setUserLoggedIn(false);
             mSqlLiteHelper.removeAll();
