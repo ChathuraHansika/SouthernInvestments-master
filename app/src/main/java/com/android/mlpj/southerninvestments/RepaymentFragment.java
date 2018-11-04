@@ -218,7 +218,7 @@ public class RepaymentFragment extends Fragment {
 
         //check whether edit or new payment
         isRepaymentDone = repaymentDate.equals(currentDateString);
-
+        Toast.makeText(getContext(), repaymentDate, Toast.LENGTH_LONG).show();
         if (!isRepaymentDone) {
             mBtnPrint.setVisibility(View.INVISIBLE);
             mBtnPay.setText("Pay");
@@ -303,10 +303,14 @@ public class RepaymentFragment extends Fragment {
                 @Override
                 public void onResponse(Call<RepaymentDoneResponse> call, Response<RepaymentDoneResponse> response) {
                     if (response.code() == 200) {
-                        Toast.makeText(getContext(), "Successfully entered the installment ", Toast.LENGTH_LONG).show();
-                        Repayment newRepayment = response.body().getRepayments();
-                        sqlLiteHelper.insertRepayments(newRepayment);
-                        updateView();
+                        if (response.body().isError()){
+                            Toast.makeText(getContext(), "There is already an installment made today. Please update phone date and sync the app", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getContext(), "Successfully entered the installment ", Toast.LENGTH_LONG).show();
+                            Repayment newRepayment = response.body().getRepayments();
+                            sqlLiteHelper.insertRepayments(newRepayment);
+                            updateView();
+                        }
                         mProgressDialog.dismiss();
 
 //                        Fragment fragment = new EnterCustomerNumberFragment();
@@ -415,12 +419,16 @@ public class RepaymentFragment extends Fragment {
                 @Override
                 public void onResponse(Call<RepaymentDoneResponse> call, Response<RepaymentDoneResponse> response) {
                     if (response.code() == 200) {
-                        Toast.makeText(getContext(), "Successfully edited the installment ", Toast.LENGTH_LONG).show();
-                        Repayment newRepayment = response.body().getRepayments();
-                        sqlLiteHelper.deleteReapymentById(repaymentId);
-                        sqlLiteHelper.insertRepayments(newRepayment);
-                        iseditEnabled = false;
-                        updateView();
+                        if(response.body().isError()){
+                            Toast.makeText(getContext(), "You can't edit a past installment. Please check your phone date ", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getContext(), "Successfully edited the installment ", Toast.LENGTH_LONG).show();
+                            Repayment newRepayment = response.body().getRepayments();
+                            sqlLiteHelper.deleteReapymentById(repaymentId);
+                            sqlLiteHelper.insertRepayments(newRepayment);
+                            iseditEnabled = false;
+                            updateView();
+                        }
                         mProgressDialog.dismiss();
 
 //                        Fragment fragment = new EnterCustomerNumberFragment();
