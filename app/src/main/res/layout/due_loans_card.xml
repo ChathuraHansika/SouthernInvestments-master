@@ -54,6 +54,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                android:textStyle="bold"
                 android:text="Ychitha sandaruwan"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.758"
@@ -80,6 +81,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:text="950853891V"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.771"
                 app:layout_constraintStart_toEndOf="@+id/textView4"
@@ -105,6 +107,7 @@
                 android:layout_marginStart="28dp"
                 android:layout_marginTop="20dp"
                 android:text="15000"
+                android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/textView6"
                 app:layout_constraintTop_toBottomOf="@+id/D_NIC" />
 
@@ -132,6 +135,7 @@
                 android:layout_marginTop="20dp"
                 android:gravity="start"
                 android:text="30000"
+                android:textStyle="bold"
                 android:textAlignment="viewStart"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/D_NIC" />
@@ -160,7 +164,7 @@
                 android:layout_marginStart="36dp"
 
                 android:layout_marginTop="16dp"
-
+                android:textStyle="bold"
                 android:text="12"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView10"
@@ -174,6 +178,7 @@
                 android:layout_height="23dp"
                 android:layout_marginBottom="8dp"
                 android:text="/"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tv_paid_installments" />
 
@@ -187,6 +192,7 @@
                 android:layout_marginTop="16dp"
                 android:gravity="start"
                 android:text="60"
+                android:textStyle="bold"
                 android:textAlignment="viewStart"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/textView14"
@@ -204,6 +210,7 @@
                 android:layout_marginEnd="44dp"
                 android:layout_marginTop="8dp"
                 android:text="Days"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView9"
