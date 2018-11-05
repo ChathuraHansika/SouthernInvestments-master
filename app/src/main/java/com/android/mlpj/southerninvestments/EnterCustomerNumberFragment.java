@@ -1,6 +1,7 @@
 package com.android.mlpj.southerninvestments;
 
 
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -30,6 +32,10 @@ public class EnterCustomerNumberFragment extends Fragment {
         ((MainActivity)getActivity()).setTitle("Enter customer number");
 
         mEtInputCustomerNumber = view.findViewById(R.id.input_customer_number);
+        mEtInputCustomerNumber.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+
         mBtnAddCustomerNumber = view.findViewById(R.id.add_customer_number);
         sqlLiteHelper = new SQLLiteHelper(getContext());
 

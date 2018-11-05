@@ -40,6 +40,7 @@ public class HomeFragment extends Fragment {
         SalesRep currUser = userLocalStore.getUserDetails();
 
         //set prof pic here
+        //
 
         tvName.setText(currUser.getName());
         //tvRoute.setText();
