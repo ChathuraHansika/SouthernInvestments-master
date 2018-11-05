@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
         }*/
 
         String email = _emailText.getText().toString();
-        String password = _passwordText.getText().toString();
+        final String password = _passwordText.getText().toString();
 
         if (email.equals("")) {
             _emailText.setError("Can't be empty");
@@ -128,7 +128,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
                                 //saving salesrep details in shared preferences
-                                userLocalStore.setUserLoggedIn(true);
+                                userLocalStore.setUserLoggedIn(true, password);
                                 userLocalStore.setUserDetails(loginResultPOJO.getUser());
 
                                 Intent intent = new Intent(getApplicationContext(),MainActivity.class);

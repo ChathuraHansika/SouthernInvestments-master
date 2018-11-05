@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity
 
         }else if (id == R.id.nav_logout) {
             mUserLocalStore.clearUser();
-            mUserLocalStore.setUserLoggedIn(false);
+            mUserLocalStore.setUserLoggedIn(false, "");
             mSqlLiteHelper.removeAll();
 
             Intent intent = new Intent(this,LoginActivity.class);

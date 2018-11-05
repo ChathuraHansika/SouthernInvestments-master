@@ -53,9 +53,10 @@ public class UserLocalStore {
         return  user;
     }
 
-    public void setUserLoggedIn(boolean loggedIn){
+    public void setUserLoggedIn(boolean loggedIn, String password){
         SharedPreferences.Editor spEditor = userLocalDatabase.edit();
         spEditor.putBoolean("loggedIn", loggedIn);
+        spEditor.putString("password", password);
         spEditor.commit();
     }
 
@@ -64,6 +65,11 @@ public class UserLocalStore {
             return true;
         else
             return false;
+    }
+
+    public String getPassword() {
+        String password = userLocalDatabase.getString("password","");
+        return password;
     }
 
     public void clearUser(){
