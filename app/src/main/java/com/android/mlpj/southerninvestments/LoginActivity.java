@@ -136,13 +136,15 @@ public class LoginActivity extends AppCompatActivity {
                                 finish();
                             }
 
-                        }catch (NullPointerException e){
+                        } catch (NullPointerException e){
                             Toast.makeText(LoginActivity.this, "Null pointer Exception "+ e.getMessage(), Toast.LENGTH_LONG).show();
                         }
 
 
-                    }else{
-                        Toast.makeText(LoginActivity.this, "HTTP Error code " + response.code(), Toast.LENGTH_LONG).show();
+                    } else if (response.code() == 401){
+                        Toast.makeText(LoginActivity.this, "Invalid Login Credentials", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(LoginActivity.this, "HTTP Error code" + response.code(), Toast.LENGTH_LONG).show();
                     }
 
 
