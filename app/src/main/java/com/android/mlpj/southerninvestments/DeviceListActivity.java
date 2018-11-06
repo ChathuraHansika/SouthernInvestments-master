@@ -44,7 +44,8 @@ public class DeviceListActivity extends Activity {
             // Bluetooth is already in discovery mode, we cancel to restart it again
             mBluetoothAdapter.cancelDiscovery();
         }
-        mBluetoothAdapter.startDiscovery();
+        boolean a = mBluetoothAdapter.startDiscovery();
+        Toast.makeText(this, "start " + a, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -77,6 +78,7 @@ public class DeviceListActivity extends Activity {
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
+            Toast.makeText(context, "ok", Toast.LENGTH_SHORT).show();
             String action = intent.getAction();
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 // A Bluetooth device was found

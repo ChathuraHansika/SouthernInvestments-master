@@ -118,7 +118,6 @@ public class DashboardFragment extends Fragment {
                     public void onRefresh() {
                         clearDB();
                         syncDB();
-                        mSwipeRefreshLayout.setRefreshing(false);
                     }
                 }
         );
@@ -178,12 +177,13 @@ public class DashboardFragment extends Fragment {
                 } else {
                     Toast.makeText(getContext(), "Sync failed. Please logout and login again. HTTP Error code" + response.code(), Toast.LENGTH_LONG).show();
                 }
+                mSwipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onFailure(Call<LoginResultPOJO> call, Throwable t) {
                 Toast.makeText(getContext(), "Connection Failure " + t.getMessage(), Toast.LENGTH_LONG).show();
-                mProgressDialog.dismiss();
+                mSwipeRefreshLayout.setRefreshing(false);
             }
         });
     }
