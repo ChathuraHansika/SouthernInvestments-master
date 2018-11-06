@@ -159,6 +159,13 @@ public class RepaymentFragment extends Fragment {
                             }
                         }
                     };
+                    if (mBluetoothSocket == null) {
+                        Toast.makeText(getContext(), "Printer Not Connected", Toast.LENGTH_SHORT).show();
+                    } else {
+                        if (!mBluetoothSocket.isConnected()) {
+                            Toast.makeText(getContext(), "Printer Not Connected", Toast.LENGTH_SHORT).show();
+                        }
+                    }
                     t.start();
                 }
             }

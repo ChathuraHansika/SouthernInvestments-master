@@ -27,6 +27,8 @@ public class DeviceListActivity extends Activity {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.device_list);
 
+        setTitle("Searching...");
+
         setResult(Activity.RESULT_CANCELED);
         mPairedDevicesArrayAdapter = new ArrayAdapter<>(this, R.layout.device_name);
 
@@ -45,7 +47,6 @@ public class DeviceListActivity extends Activity {
             mBluetoothAdapter.cancelDiscovery();
         }
         boolean a = mBluetoothAdapter.startDiscovery();
-        Toast.makeText(this, "start " + a, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -78,7 +79,6 @@ public class DeviceListActivity extends Activity {
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
-            Toast.makeText(context, "ok", Toast.LENGTH_SHORT).show();
             String action = intent.getAction();
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 // A Bluetooth device was found
