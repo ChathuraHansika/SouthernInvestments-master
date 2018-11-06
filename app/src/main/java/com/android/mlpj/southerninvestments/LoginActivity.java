@@ -78,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
         }*/
 
         String email = _emailText.getText().toString();
-        String password = _passwordText.getText().toString();
+        final String password = _passwordText.getText().toString();
 
         if (email.equals("")) {
             _emailText.setError("Can't be empty");
@@ -129,7 +129,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
                                 //saving salesrep details in shared preferences
-                                userLocalStore.setUserLoggedIn(true);
+                                userLocalStore.setUserLoggedIn(true, password);
                                 userLocalStore.setUserDetails(loginResultPOJO.getUser());
 
                                 Intent intent = new Intent(getApplicationContext(),MainActivity.class);
@@ -137,14 +137,15 @@ public class LoginActivity extends AppCompatActivity {
                                 finish();
                             }
 
-                        }catch (NullPointerException e){
+                        } catch (NullPointerException e){
                             Toast.makeText(LoginActivity.this, "Null pointer Exception "+ e.getMessage(), Toast.LENGTH_LONG).show();
                         }
 
 
-                    }else{
-                        Toast.makeText(LoginActivity.this, "HTTP Error code " + response.code(), Toast.LENGTH_LONG).show();
-                        
+                    } else if (response.code() == 401){
+                        Toast.makeText(LoginActivity.this, "Invalid Login Credentials", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(LoginActivity.this, "HTTP Error code" + response.code(), Toast.LENGTH_LONG).show();
                     }
 
 
