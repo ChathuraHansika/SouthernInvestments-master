@@ -17,4 +17,13 @@
     <string name="none_paired">No matching devices</string>
     <string name="none_found">No device found</string>
 
+    <string-array name="planets_array">
+        <item>Expences for transport</item>
+        <item>Expences for foods</item>
+        <item>Others</item>
+    </string-array>
+
 </resources>
+
+
+

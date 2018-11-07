@@ -4,6 +4,7 @@ package com.android.mlpj.southerninvestments;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
@@ -220,6 +222,9 @@ public class RepaymentFragment extends Fragment {
         isRepaymentDone = repaymentDate.equals(currentDateString);
         Toast.makeText(getContext(), repaymentDate, Toast.LENGTH_LONG).show();
         if (!isRepaymentDone) {
+            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+            mEtRepaymentAmount.requestFocus();
             mBtnPrint.setVisibility(View.INVISIBLE);
             mBtnPay.setText("Pay");
             mBtnPay.setEnabled(true);
@@ -229,6 +234,9 @@ public class RepaymentFragment extends Fragment {
             mEtRepaymentAmount.setEnabled(true);
         }
         if (isRepaymentDone && iseditEnabled) {
+            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+            mEtRepaymentAmount.requestFocus();
             //Toast.makeText(getContext(), "ok", Toast.LENGTH_SHORT).show();
             mBtnPay.setText("Save edit");
             mBtnPay.setEnabled(true);

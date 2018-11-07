@@ -155,6 +155,10 @@ public class MainActivity extends AppCompatActivity
 //
         }else if(id == R.id.nav_pocket_money) {
             Toast.makeText(this, "PocketMoney", Toast.LENGTH_SHORT).show();
+                        setTitle("Pocket Money");
+            Fragment fragment = new PocketMoneyFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment).commit();
 
 //            pocket money
 
