@@ -66,12 +66,34 @@ public class PocketMoneyFragment extends Fragment implements AdapterView.OnItemS
             @Override
             public void onClick(View v) {
                amount = Etamount.getText().toString();
-     Toast.makeText(getContext(), item +" \n" + amount +"\n" + userLocalStore.getUserDetails().getId()+"  d", Toast.LENGTH_SHORT).show();
-            PocketMoney pocketMoney = new PocketMoney(userLocalStore.getUserDetails().getId(),
-                                                      Float.valueOf(Etamount.getText().toString()).floatValue(),
-                                                      item);
+               Toast.makeText(getContext(), item +" \n" +  Float.valueOf(Etamount.getText().toString()).floatValue()  +"\n" + userLocalStore.getUserDetails().getId()+"  d", Toast.LENGTH_SHORT).show();
+//            PocketMoney pocketMoney = new PocketMoney(userLocalStore.getUserDetails().getId(),
+//                                                      Float.valueOf(Etamount.getText().toString()).floatValue(),
+//                                                      item);
 
-            sendPocketMoney(pocketMoney);
+//            sendPocketMoney(pocketMoney);
+                Retrofit.Builder builder = new Retrofit.Builder()
+                        .baseUrl("http://www.southernpropertydevelopers.com/")
+                        .addConverterFactory(GsonConverterFactory.create());
+                Retrofit retrofit = builder.build();
+
+                ApiInterface client = retrofit.create(ApiInterface.class);
+                Call<PocketMoneyResponse> call = client.addPocketMoney(Integer.toString(userLocalStore.getUserDetails().getId()),
+                                                                 Etamount.getText().toString(),
+                                                                 item.toString());
+
+                call.enqueue(new Callback<PocketMoneyResponse>() {
+                    @Override
+                    public void onResponse(Call<PocketMoneyResponse> call, Response<PocketMoneyResponse> response) {
+                        Toast.makeText(getContext(), "Success" +"\n" + response.body().getPocketMoney().getDescription() + response.code(), Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onFailure(Call<PocketMoneyResponse> call, Throwable t) {
+                        Toast.makeText(getContext(), "Fail"+ t, Toast.LENGTH_LONG).show();
+
+                    }
+                });
 
 
             }
@@ -79,28 +101,7 @@ public class PocketMoneyFragment extends Fragment implements AdapterView.OnItemS
 
         return view;
     }
-    public void sendPocketMoney(PocketMoney pocketMoney){
-        Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("http://www.southernpropertydevelopers.com/")
-                .addConverterFactory(GsonConverterFactory.create());
-        Retrofit retrofit = builder.build();
 
-        ApiInterface client = retrofit.create(ApiInterface.class);
-        Call<PocketMoney> call = client.addPocketMoney(pocketMoney);
-
-        call.enqueue(new Callback<PocketMoney>() {
-            @Override
-            public void onResponse(Call<PocketMoney> call, Response<PocketMoney> response) {
-                Toast.makeText(getContext(), "Success"+ response, Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onFailure(Call<PocketMoney> call, Throwable t) {
-                Toast.makeText(getContext(), "Fail"+ t, Toast.LENGTH_LONG).show();
-
-            }
-        });
-    }
 
     @Override
 

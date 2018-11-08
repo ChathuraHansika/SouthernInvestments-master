@@ -4,33 +4,33 @@ import com.google.gson.annotations.SerializedName;
 
 public class PocketMoney {
     @SerializedName("sales_rep_id")
-    private int sales_rep_id;
+    private String sales_rep_id;
 
     @SerializedName("amount")
-    private float amount;
+    private String amount;
 
     @SerializedName("description")
     private String description;
 
-    public PocketMoney(int sales_rep_id, float amount, String description) {
+    public PocketMoney(String sales_rep_id, String amount, String description) {
         this.sales_rep_id = sales_rep_id;
         this.amount = amount;
         this.description = description;
     }
 
-    public int getSales_rep_id() {
+    public String getSales_rep_id() {
         return sales_rep_id;
     }
 
-    public void setSales_rep_id(int sales_rep_id) {
+    public void setSales_rep_id(String sales_rep_id) {
         this.sales_rep_id = sales_rep_id;
     }
 
-    public float getAmount() {
+    public String getAmount() {
         return amount;
     }
 
-    public void setAmount(float amount) {
+    public void setAmount(String amount) {
         this.amount = amount;
     }
 

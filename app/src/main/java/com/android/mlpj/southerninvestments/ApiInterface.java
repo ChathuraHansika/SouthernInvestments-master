@@ -34,8 +34,10 @@ public interface ApiInterface {
                                               @Field("cheque_no") String cheque_no);
 
     @POST("api/createPocketMoney")
-    //@FormUrlEncoded
-    Call<PocketMoney> addPocketMoney (@Body PocketMoney pocketMoney);
+    @FormUrlEncoded
+    Call<PocketMoneyResponse> addPocketMoney (@Field("id") String sales_rep_id,
+                                              @Field("amount") String amount,
+                                              @Field("description") String description);
 
     @GET("Hotel")
     Call<List<CustomerDetails>> getDetails();
