@@ -4,6 +4,7 @@ package com.android.mlpj.southerninvestments;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
@@ -234,6 +236,9 @@ public class RepaymentFragment extends Fragment {
             mEditing.setVisibility(View.INVISIBLE);
             mEtRepaymentAmount.setText("");
             mEtRepaymentAmount.setEnabled(true);
+            mEtRepaymentAmount.requestFocus();
+            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
         }
         if (isRepaymentDone && iseditEnabled) {
             //Toast.makeText(getContext(), "ok", Toast.LENGTH_SHORT).show();
@@ -246,6 +251,9 @@ public class RepaymentFragment extends Fragment {
             mEditing.setVisibility(View.VISIBLE);
             mEtRepaymentAmount.setText(Float.toString(paidAmount));
             mEtRepaymentAmount.setEnabled(true);
+            mEtRepaymentAmount.requestFocus();
+            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
         }
         if (isRepaymentDone && !iseditEnabled) {
             //Toast.makeText(getContext(), "ok", Toast.LENGTH_SHORT).show();
@@ -258,6 +266,8 @@ public class RepaymentFragment extends Fragment {
             mEditing.setVisibility(View.VISIBLE);
             mEtRepaymentAmount.setText(Float.toString(paidAmount));
             mEtRepaymentAmount.setEnabled(false);
+            final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
         }
     }
 
@@ -508,4 +518,10 @@ public class RepaymentFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+    }
 }
