@@ -27,6 +27,8 @@ public class DeviceListActivity extends Activity {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.device_list);
 
+        setTitle("Searching...");
+
         setResult(Activity.RESULT_CANCELED);
         mPairedDevicesArrayAdapter = new ArrayAdapter<>(this, R.layout.device_name);
 
@@ -44,7 +46,7 @@ public class DeviceListActivity extends Activity {
             // Bluetooth is already in discovery mode, we cancel to restart it again
             mBluetoothAdapter.cancelDiscovery();
         }
-        mBluetoothAdapter.startDiscovery();
+        boolean a = mBluetoothAdapter.startDiscovery();
     }
 
     @Override
