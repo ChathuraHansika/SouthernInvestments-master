@@ -229,9 +229,6 @@ public class RepaymentFragment extends Fragment {
         isRepaymentDone = repaymentDate.equals(currentDateString);
         Toast.makeText(getContext(), repaymentDate, Toast.LENGTH_LONG).show();
         if (!isRepaymentDone) {
-            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-            mEtRepaymentAmount.requestFocus();
             mBtnPrint.setVisibility(View.INVISIBLE);
             mBtnPay.setText("Pay");
             mBtnPay.setEnabled(true);
@@ -244,9 +241,6 @@ public class RepaymentFragment extends Fragment {
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
         }
         if (isRepaymentDone && iseditEnabled) {
-            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-            mEtRepaymentAmount.requestFocus();
             //Toast.makeText(getContext(), "ok", Toast.LENGTH_SHORT).show();
             mBtnPay.setText("Save edit");
             mBtnPay.setEnabled(true);
@@ -273,7 +267,8 @@ public class RepaymentFragment extends Fragment {
             mEtRepaymentAmount.setText(Float.toString(paidAmount));
             mEtRepaymentAmount.setEnabled(false);
             final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+            if(getView() != null)
+                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
         }
     }
 
