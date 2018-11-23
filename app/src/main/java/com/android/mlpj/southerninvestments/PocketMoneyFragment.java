@@ -37,6 +37,7 @@ public class PocketMoneyFragment extends Fragment implements AdapterView.OnItemS
 
     public PocketMoneyFragment() {
         // Required empty public constructor
+        //
     }
 
 
