@@ -26,6 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressDialog mProgressDialog;
     private SQLLiteHelper sqlLiteHelper;
     private UserLocalStore userLocalStore;
+    private Snackbar mSnackbar;
 
     EditText _emailText;
     EditText _passwordText;
@@ -160,6 +161,15 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "Connection Failure " + t.getMessage(), Toast.LENGTH_LONG).show();
                     mProgressDialog.dismiss();
                     _loginButton.setEnabled(true);
+//                    mSnackbar = Snackbar.make(findViewById(R.id.login_activity), "Connection Failure. Please check your internet connection.",
+//                            Snackbar.LENGTH_INDEFINITE);
+//                    mSnackbar.setAction("Dismiss", new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            mSnackbar.dismiss();
+//                        }
+//                    });
+//                    mSnackbar.show();
                 }
             });
         }
