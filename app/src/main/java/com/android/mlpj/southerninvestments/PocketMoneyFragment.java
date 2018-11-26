@@ -67,12 +67,8 @@ public class PocketMoneyFragment extends Fragment implements AdapterView.OnItemS
             @Override
             public void onClick(View v) {
                amount = Etamount.getText().toString();
-               Toast.makeText(getContext(), item +" \n" +  Float.valueOf(Etamount.getText().toString()).floatValue()  +"\n" + userLocalStore.getUserDetails().getId()+"  d", Toast.LENGTH_SHORT).show();
-//            PocketMoney pocketMoney = new PocketMoney(userLocalStore.getUserDetails().getId(),
-//                                                      Float.valueOf(Etamount.getText().toString()).floatValue(),
-//                                                      item);
+             //  Toast.makeText(getContext(), item +" \n" +  Float.valueOf(Etamount.getText().toString()).floatValue()  +"\n" + userLocalStore.getUserDetails().getId()+"  d", Toast.LENGTH_SHORT).show();
 
-//            sendPocketMoney(pocketMoney);
                 Retrofit.Builder builder = new Retrofit.Builder()
                         .baseUrl("http://www.southernpropertydevelopers.com/")
                         .addConverterFactory(GsonConverterFactory.create());
@@ -86,7 +82,18 @@ public class PocketMoneyFragment extends Fragment implements AdapterView.OnItemS
                 call.enqueue(new Callback<PocketMoneyResponse>() {
                     @Override
                     public void onResponse(Call<PocketMoneyResponse> call, Response<PocketMoneyResponse> response) {
-                        Toast.makeText(getContext(), "Success" +"\n" + response.body().getPocketMoney().getDescription() + response.code(), Toast.LENGTH_LONG).show();
+                        if(response.code() == 200){
+                            try {
+                                Toast.makeText(getContext(), "Success" +"\n" + response.body().getPocketMoney().getDescription() + response.code(), Toast.LENGTH_LONG).show();
+
+                            }catch (NullPointerException ex){
+                                Toast.makeText(getActivity(), "Null pointer Exception "+ ex.getMessage(), Toast.LENGTH_LONG).show();
+
+                            }
+                        }else{
+                            Toast.makeText(getActivity(), "HTTP Error. Please Retry", Toast.LENGTH_LONG).show();
+
+                        }
                     }
 
                     @Override
